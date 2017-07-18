@@ -10,10 +10,10 @@ class Bookshelf(models.Model):
     """
     书架
     """
-    book = models.ForeignKey(Book)
     sort = models.IntegerField(default=0, verbose_name=u'排序')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
+    book = models.OneToOneField(Book, primary_key=True)
 
     class Meta:
         db_table = "t_bookshelf"

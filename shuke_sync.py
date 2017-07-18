@@ -3,6 +3,7 @@
 import json
 import sqlite3
 import urllib2
+from time import timezone
 
 domain = "http://smartebook.zmapp.com:9026"
 
@@ -29,8 +30,18 @@ def sync_bookshelf():
     url = "%s/smart_book/get_bookshelf" % domain
     page = urllib2.urlopen(url)
     result = json.loads(page.read())
-    for b in result['bookshelf']:
-        sync_book(b['book_id'], 'zm')
+    for index, b in enumerate(result['bookshelf']):
+        bid = int(b['book_id'])
+
+        try:
+            sql = 'INSERT INTO t_bookshelf(book_id, sort, create_time, update_time)' \
+                  ' VALUES(%d, %d, datetime(\'now\',\'localtime\'), datetime(\'now\',\'localtime\'))' % (bid, index)
+            conn.execute(sql)
+            conn.commit()
+        except Exception, e:
+            print e.message
+
+        sync_book(bid, 'zm')
 
 
 # 同步排行详情
@@ -48,7 +59,9 @@ def sync_ranking():
     page = urllib2.urlopen("%s/smart_book/get_rank_class" % domain)
     result = json.loads(page.read())
     for c in result['rank_subjects']:
+        # TODO 一级排行
         for d in c['classes']:
+            # TODO 二级排行
             sync_ranking_detail(d['class_id'])
 
 
@@ -67,14 +80,17 @@ def sync_classification():
     page = urllib2.urlopen("%s/smart_book/get_class" % domain)
     result = json.loads(page.read())
     for c in result['class_subjects']:
+        # TODO 一级分类
         for d in c['columns']:
+            # TODO 二级分类
             for e in d['classes']:
+                # TODO 三级分类
                 sync_classification_detail(e['class_id'])
 
 
-# sync_bookshelf()
+sync_bookshelf()
 
-sync_ranking()
+# sync_ranking()
 
 # sync_classification()
 
