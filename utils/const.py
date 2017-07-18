@@ -24,7 +24,7 @@ CHOICE_USER_TYPE = (
 # 性别
 MALE = '1'
 FEMALE = '2'
-CHOICE_SEX = (
+CHOICE_GENDER = (
     (MALE, u"男"),
     (FEMALE, u"女")
 )

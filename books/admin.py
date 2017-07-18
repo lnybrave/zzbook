@@ -3,16 +3,7 @@
 
 from django.contrib import admin
 
-from books.models import Book, Author
-
-
-@admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
-    """
-    作者
-    """
-
-    list_display = ['name', 'brief', 'email']
+from books.models import Book
 
 
 @admin.register(Book)

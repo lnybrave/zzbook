@@ -3,25 +3,14 @@
 
 from django.db import models
 
-
-class Author(models.Model):
-    name = models.CharField(max_length=128, verbose_name=u'名称')
-    brief = models.CharField(max_length=256, verbose_name=u'简介')
-    email = models.EmailField()
-
-    class Meta:
-        db_table = "t_author"
-        verbose_name = u"作者表"
-        verbose_name_plural = u"作者表"
-
-    def __unicode__(self):
-        return self.name
+from account.models import User
 
 
 class Book(models.Model):
+    bid = models.IntegerField(primary_key=True, verbose_name=u'bid')
     name = models.CharField(max_length=128, verbose_name=u'名称')
     brief = models.CharField(max_length=256, verbose_name=u'简介')
-    author = models.ManyToManyField(Author)
+    author = models.ManyToManyField(User, blank=True)
 
     class Meta:
         db_table = "t_book"

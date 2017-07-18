@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
 
+    'account',
     'banner',
     'books',
     'bookshelf',
@@ -150,3 +151,6 @@ DATE_FORMAT = 'Y-m-d'
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+AUTH_USER_MODEL = 'account.User'  # 系统
