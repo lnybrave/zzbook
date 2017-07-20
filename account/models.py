@@ -11,22 +11,33 @@ from utils.const import DEL_FLAG_YES, CHOICE_GENDER, CHOICE_USER_TYPE, CHOICE_DE
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None, **kwargs):
-        if (not username) or (not password):
-            raise ValueError('UserManager create user param error')
-
-        user = self.model(
-            username=username,
-        )
+    def _create_user(self, username, password, **extra_fields):
+        """
+        Creates and saves a User with the given username, email and password.
+        """
+        if not username:
+            raise ValueError('The given username must be set')
+        username = self.model.normalize_username(username)
+        user = self.model(username=username, **extra_fields)
         user.set_password(password)
-        if kwargs:
-            if kwargs.get('num', None):
-                user.email = kwargs['num']
-            if not kwargs.get('birth', None):
-                user.birth = kwargs['birth']
-        user.birth = datetime.now()
         user.save(using=self._db)
         return user
+
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(username, email, password, **extra_fields)
+
+    def create_superuser(self, username, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self._create_user(username, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -37,10 +48,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     nickname = models.CharField(max_length=64, blank=True, null=True, verbose_name=u'昵称')
     name = models.CharField(max_length=64, verbose_name=u'姓名')
     gender = models.CharField(max_length=2, choices=CHOICE_GENDER, verbose_name=u'性别')
-    birth = models.DateField(verbose_name=u'生日')
+    birth = models.DateField(verbose_name=u'生日', blank=True, null=True)
     head = models.ImageField(upload_to='user/', storage=storage.ImageStorage(), blank=True, null=True,
                              verbose_name=u'头像')
-    brief = models.CharField(max_length=256, verbose_name=u'简介')
+    brief = models.CharField(max_length=256, blank=True, verbose_name=u'简介')
     type = models.CharField(max_length=1, choices=CHOICE_USER_TYPE, verbose_name=u'用户类型')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')

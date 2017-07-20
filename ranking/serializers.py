@@ -3,11 +3,13 @@
 
 from rest_framework import serializers
 
+from books.serializers import BookSerializer
 from ranking.models import Ranking
 
 
 class RankingSerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True)
 
     class Meta:
         model = Ranking
-        fields = '__all__'
+        fields = ('id', 'name', 'parent', 'children', 'books')

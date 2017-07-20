@@ -3,7 +3,6 @@
 import json
 import sqlite3
 import urllib2
-from time import timezone
 
 domain = "http://smartebook.zmapp.com:9026"
 

@@ -16,10 +16,11 @@ class Banner(models.Model):
     desc = models.CharField(max_length=256, verbose_name=u'描述')
     img = models.ImageField(upload_to='images/', storage=storage.ImageStorage(), verbose_name=u'图片')
     type = models.IntegerField(default=0, verbose_name=u'类型')
-    book = models.ForeignKey(Book)
-    topic = models.ForeignKey(Topic)
+    status = models.IntegerField(default=1, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
+    book = models.ForeignKey(Book, blank=True)
+    topic = models.ForeignKey(Topic, blank=True)
 
     class Meta:
         db_table = "t_banner"

@@ -42,10 +42,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
 
+    'mptt',
+
     'account',
     'banner',
     'books',
     'bookshelf',
+    'subject',
     'column',
     'classification',
     'ranking',
@@ -71,8 +74,10 @@ SUIT_CONFIG = {
         {'app': 'banner', 'label': u'广告', 'icon': 'icon-user', },
         {'app': 'books', 'label': u'图书', 'icon': 'icon-user', },
         {'app': 'bookshelf', 'label': u'书架', 'icon': 'icon-user', },
+        {'app': 'subject', 'label': u'频道', 'icon': 'icon-user', },
         {'app': 'column', 'label': u'栏目', 'icon': 'icon-user', },
         {'app': 'ranking', 'label': u'排行', 'icon': 'icon-user', },
+        {'app': 'classification', 'label': u'分类', 'icon': 'icon-user', },
         {'app': 'hotword', 'label': u'关键字', 'icon': 'icon-user', },
     )
 }
@@ -88,6 +93,9 @@ SWAGGER_SETTINGS = {
 }
 
 ROOT_URLCONF = 'ebook.urls'
+
+# default is 10 pixels
+MPTT_ADMIN_LEVEL_INDENT = 20
 
 TEMPLATES = [
     {
@@ -152,5 +160,7 @@ DATE_FORMAT = 'Y-m-d'
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'account.User'  # 系统

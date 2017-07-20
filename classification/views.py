@@ -9,3 +9,4 @@ from classification.serializers import ClassificationSerializer
 class ClassificationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Classification.objects.all()
     serializer_class = ClassificationSerializer
+    pagination_class = None
