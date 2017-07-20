@@ -9,9 +9,16 @@ from ranking.models import Ranking
 
 
 class RankingSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
     children = serializers.ListSerializer(read_only=True, child=RecursiveField())
 
     class Meta:
         model = Ranking
-        fields = ('id', 'name', 'children', 'books')
+        fields = ('id', 'name', 'children')
+
+
+class RankingDetailSerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True)
+
+    class Meta:
+        model = Ranking
+        fields = ('id', 'name', 'books')

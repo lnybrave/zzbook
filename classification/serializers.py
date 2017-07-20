@@ -9,9 +9,16 @@ from classification.models import Classification
 
 
 class ClassificationSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
     children = serializers.ListSerializer(read_only=True, child=RecursiveField())
 
     class Meta:
         model = Classification
-        fields = ('id', 'name', 'children', 'books')
+        fields = ('id', 'name', 'children')
+
+
+class ClassificationDetailSerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True)
+
+    class Meta:
+        model = Classification
+        fields = ('id', 'name', 'books')
