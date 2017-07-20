@@ -30,17 +30,7 @@ def sync_bookshelf():
     page = urllib2.urlopen(url)
     result = json.loads(page.read())
     for index, b in enumerate(result['bookshelf']):
-        bid = int(b['book_id'])
-
-        try:
-            sql = 'INSERT INTO t_bookshelf(book_id, sort, create_time, update_time)' \
-                  ' VALUES(%d, %d, datetime(\'now\',\'localtime\'), datetime(\'now\',\'localtime\'))' % (bid, index)
-            conn.execute(sql)
-            conn.commit()
-        except Exception, e:
-            print e.message
-
-        sync_book(bid, 'zm')
+        sync_book(b['book_id'], 'zm')
 
 
 # 同步排行详情
