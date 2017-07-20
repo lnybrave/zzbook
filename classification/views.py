@@ -10,3 +10,6 @@ class ClassificationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Classification.objects.all()
     serializer_class = ClassificationSerializer
     pagination_class = None
+
+    def get_queryset(self):
+        return super(ClassificationViewSet, self).get_queryset().filter(level=0)

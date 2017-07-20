@@ -16,3 +16,6 @@ class Subject(models.Model):
         db_table = "t_subject"
         verbose_name = u"频道表"
         verbose_name_plural = u"频道表"
+
+    def __unicode__(self):
+        return self.name

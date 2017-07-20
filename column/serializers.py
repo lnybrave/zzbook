@@ -3,13 +3,16 @@
 
 from rest_framework import serializers
 
+from books.serializers import BookSerializer
 from column.models import Column, Topic
 
 
 class TopicSerializer(serializers.ModelSerializer):
+    books = BookSerializer(many=True)
+
     class Meta:
         model = Topic
-        fields = '__all__'
+        fields = ('pk', 'name', 'desc', 'type', 'is_recommend', 'books')
 
 
 class ColumnSerializer(serializers.ModelSerializer):
@@ -17,4 +20,4 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        fields = ('name', 'desc', 'topics')
+        fields = ('pk', 'name', 'desc', 'topics')

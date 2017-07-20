@@ -10,3 +10,6 @@ class RankingViewSet(ReadOnlyModelViewSet):
     queryset = Ranking.objects.all()
     serializer_class = RankingSerializer
     pagination_class = None
+
+    def get_queryset(self):
+        return super(RankingViewSet, self).get_queryset().filter(level=0)
