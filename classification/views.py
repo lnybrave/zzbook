@@ -14,12 +14,10 @@ class ClassificationViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset().filter(level=0))
-        serializer_class = ClassificationSerializer
-        serializer = serializer_class(queryset, many=True, context=self.get_serializer_context())
+        serializer = ClassificationSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer_class = ClassificationDetailSerializer
-        serializer = serializer_class(instance, context=self.get_serializer_context())
+        serializer = ClassificationDetailSerializer(instance, context=self.get_serializer_context())
         return Response(serializer.data)
