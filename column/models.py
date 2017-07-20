@@ -25,11 +25,6 @@ class Topic(models.Model):
     def __unicode__(self):
         return self.name
 
-    def column_name(self):
-        return self.column.name
-
-    column_name.short_description = u"栏目"
-
 
 class Column(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
