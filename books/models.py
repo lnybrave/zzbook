@@ -7,7 +7,7 @@ from account.models import User
 
 
 class Book(models.Model):
-    bid = models.IntegerField(primary_key=True, verbose_name=u'bid')
+    id = models.IntegerField(primary_key=True, verbose_name=u'ID')
     name = models.CharField(max_length=128, verbose_name=u'名称')
     brief = models.CharField(max_length=256, verbose_name=u'简介')
     author = models.ManyToManyField(User, blank=True)
