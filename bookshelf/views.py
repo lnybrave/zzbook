@@ -17,6 +17,6 @@ class BookshelfViewSet(mixins.ListModelMixin, GenericViewSet):
 
     @list_route(methods=['get'])
     def recommendation(self, request):
-        data_set = self.get_queryset()
+        data_set = self.get_queryset().filter(type=2)
         serializer = BookshelfSerializer(data_set, many=True)
         return Response(serializer.data)

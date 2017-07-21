@@ -35,7 +35,7 @@ class Column(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     subject = models.ForeignKey(Subject)
-    topics = models.ManyToManyField(Topic, related_name='topics', blank=True, null=True)
+    topics = models.ManyToManyField(Topic, related_name='topics', blank=True)
 
     class Meta:
         db_table = "t_column"

@@ -25,17 +25,18 @@ from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
 from classification.views import ClassificationViewSet
 from column.views import ColumnViewSet
-from hotword.views import HotWordViewSet
+from search.views import SearchWordViewSet, SearchBookViewSet
 from ranking.views import RankingViewSet
 
 router = DefaultRouter()
-router.register(r'banner', BannerViewSet)
-router.register(r'book', BookViewSet)
-router.register(r'bookshelf', BookshelfViewSet)
-router.register(r'column', ColumnViewSet)
-router.register(r'classification', ClassificationViewSet)
-router.register(r'ranking', RankingViewSet)
-router.register(r'hotword', HotWordViewSet)
+router.register(r'api/banner', BannerViewSet)
+router.register(r'api/book', BookViewSet)
+router.register(r'api/bookshelf', BookshelfViewSet)
+router.register(r'api/column', ColumnViewSet)
+router.register(r'api/classification', ClassificationViewSet)
+router.register(r'api/ranking', RankingViewSet)
+router.register(r'api/search', SearchBookViewSet)
+router.register(r'api/search/word', SearchWordViewSet)
 
 schema_view = get_swagger_view(title='EBook API')
 

@@ -18,7 +18,7 @@ from books.serializers import BookSerializer
 from classification.models import Classification
 from column.models import Column, Subject
 from column.serializers import ColumnSerializer
-from hotword.models import HotWord
+from search.models import SearchWord
 from ranking.models import Ranking
 from subject.serializers import SubjectSerializer
 from utils import err_code
@@ -111,7 +111,7 @@ def api_keyword(request):
     搜索关键词
     """
     try:
-        keywords = HotWord.objects.all()
+        keywords = SearchWord.objects.all()
         dict_resp = {"c": err_code.ERR_SUCCESS[0], "d": [keyword.get_format_dict() for keyword in keywords]}
         return HttpResponse(json.dumps(dict_resp, ensure_ascii=False), content_type="application/json")
 

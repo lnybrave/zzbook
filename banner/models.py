@@ -19,8 +19,8 @@ class Banner(models.Model):
     status = models.IntegerField(default=1, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
-    book = models.ForeignKey(Book, blank=True)
-    topic = models.ForeignKey(Topic, blank=True)
+    book = models.ForeignKey(Book, blank=True, null=True, related_name='book')
+    topic = models.ForeignKey(Topic, blank=True, null=True, related_name='topic')
 
     class Meta:
         db_table = "t_banner"

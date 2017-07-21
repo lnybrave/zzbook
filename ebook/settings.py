@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'column',
     'classification',
     'ranking',
-    'hotword'
+    'search'
 ]
 
 MIDDLEWARE = [
@@ -78,7 +78,7 @@ SUIT_CONFIG = {
         {'app': 'column', 'label': u'栏目', 'icon': 'icon-user', },
         {'app': 'ranking', 'label': u'排行', 'icon': 'icon-user', },
         {'app': 'classification', 'label': u'分类', 'icon': 'icon-user', },
-        {'app': 'hotword', 'label': u'关键字', 'icon': 'icon-user', },
+        {'app': 'search', 'label': u'关键字', 'icon': 'icon-user', },
     )
 }
 
