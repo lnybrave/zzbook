@@ -83,12 +83,13 @@ SUIT_CONFIG = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'PAGE_SIZE': 20,
 }
 
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
-    'DOC_EXPANSION': 'list',
     'APIS_SORTER': 'alpha'
 }
 

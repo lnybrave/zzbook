@@ -1,12 +1,12 @@
 # !/usr/bin/python
 # -*- coding=utf-8 -*-
-import datetime
+import uuid
+
 from django.conf.global_settings import MEDIA_URL
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
-from utils import storage
 from utils.const import DEL_FLAG_YES, CHOICE_GENDER, CHOICE_USER_TYPE, CHOICE_DELETE
 
 
@@ -40,6 +40,11 @@ class UserManager(BaseUserManager):
         return self._create_user(username, password, **extra_fields)
 
 
+def scramble_avatar_filename(instance, filename):
+    extension = filename.split(".")[-1]
+    return "avatar/{}.{}".format(uuid.uuid4(), extension)
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     用户表
@@ -49,8 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=64, verbose_name=u'姓名')
     gender = models.CharField(max_length=2, choices=CHOICE_GENDER, verbose_name=u'性别')
     birth = models.DateField(verbose_name=u'生日', blank=True, null=True)
-    head = models.ImageField(upload_to='user/', storage=storage.ImageStorage(), blank=True, null=True,
-                             verbose_name=u'头像')
+    avatar = models.ImageField(upload_to=scramble_avatar_filename, blank=True, null=True, verbose_name=u'头像')
     brief = models.CharField(max_length=256, blank=True, verbose_name=u'简介')
     type = models.CharField(max_length=1, choices=CHOICE_USER_TYPE, verbose_name=u'用户类型')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
@@ -65,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = []
 
-    class Meta(object):  # pylint: disable=C0111
+    class Meta:
         db_table = "t_user"
         verbose_name_plural = u"用户表"
         verbose_name = u"用户表"
@@ -113,23 +117,3 @@ class User(AbstractBaseUser, PermissionsMixin):
             return "{0}{1}".format(MEDIA_URL, self.head.url)
         else:
             return ""
-
-    def get_format_dict(self):
-        m_grade_format = {"id": 0, "name": ""}
-        m_class_format = {"id": 0, "name": ""}
-        if self.m_grade:
-            m_grade_format = self.m_grade.get_format_dict()
-        if self.m_class:
-            m_class_format = self.m_class.get_format_dict()
-        birth_format = self.birth.strftime('%Y-%m-%d') if self.birth else ""
-        return {"id": self.pk,
-                "num": self.num,
-                "username": self.username,
-                "name": self.name,
-                "sex": self.sex,
-                "birth": birth_format,
-                "m_grade": m_grade_format,
-                "m_class": m_class_format,
-                "head": self.get_head_img_url,
-                "user_type": self.user_type
-                }

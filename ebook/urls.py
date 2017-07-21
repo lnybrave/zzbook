@@ -20,6 +20,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
+from account.views import AvatarViewSet
 from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
@@ -29,6 +30,7 @@ from search.views import SearchWordViewSet, SearchBookViewSet
 from ranking.views import RankingViewSet
 
 router = DefaultRouter()
+router.register(r'api/account/avatar', AvatarViewSet)
 router.register(r'api/banner', BannerViewSet)
 router.register(r'api/book', BookViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
