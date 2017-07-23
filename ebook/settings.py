@@ -49,9 +49,6 @@ INSTALLED_APPS = [
     'books',
     'bookshelf',
     'subject',
-    'column',
-    'classification',
-    'ranking',
     'search'
 ]
 
@@ -75,9 +72,6 @@ SUIT_CONFIG = {
         {'app': 'books', 'label': u'图书', 'icon': 'icon-user', },
         {'app': 'bookshelf', 'label': u'书架', 'icon': 'icon-user', },
         {'app': 'subject', 'label': u'频道', 'icon': 'icon-user', },
-        {'app': 'column', 'label': u'栏目', 'icon': 'icon-user', },
-        {'app': 'ranking', 'label': u'排行', 'icon': 'icon-user', },
-        {'app': 'classification', 'label': u'分类', 'icon': 'icon-user', },
         {'app': 'search', 'label': u'关键字', 'icon': 'icon-user', },
     )
 }

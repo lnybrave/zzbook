@@ -17,8 +17,8 @@ class Bookshelf(models.Model):
 
     class Meta:
         db_table = "t_bookshelf"
-        verbose_name = u"书架表"
-        verbose_name_plural = u"书架表"
+        verbose_name = u"书架"
+        verbose_name_plural = u"书架"
 
     def __unicode__(self):
         return self.book.name

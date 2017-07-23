@@ -14,8 +14,8 @@ class Book(models.Model):
 
     class Meta:
         db_table = "t_book"
-        verbose_name = u"图书表"
-        verbose_name_plural = u"图书表"
+        verbose_name = u"图书"
+        verbose_name_plural = u"图书"
 
     def __unicode__(self):
         return self.name
@@ -33,5 +33,5 @@ class Content(models.Model):
 
     class Meta:
         db_table = "t_content"
-        verbose_name = u"目录表"
-        verbose_name_plural = u"目录表"
+        verbose_name = u"目录"
+        verbose_name_plural = u"目录"

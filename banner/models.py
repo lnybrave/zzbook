@@ -1,10 +1,10 @@
 # !/usr/bin/python
 # -*- coding=utf-8 -*-
 
+from subject.models import Topic
 from django.db import models
 
 from books.models import Book
-from column.models import Topic
 from utils import storage
 
 
@@ -24,8 +24,8 @@ class Banner(models.Model):
 
     class Meta:
         db_table = "t_banner"
-        verbose_name = u"广告表"
-        verbose_name_plural = u"广告表"
+        verbose_name = u"广告"
+        verbose_name_plural = u"广告"
 
     def __unicode__(self):
         return self.name
