@@ -4,6 +4,7 @@
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 
 from subject.models import Topic, Classification, Ranking, Subject
@@ -34,6 +35,17 @@ class ColumnViewSet(mixins.RetrieveModelMixin,
         queryset = Topic.objects.filter(subject=obj_subject)
         serializer = TopicSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
+
+    @list_route(methods=['get'])
+    def recommendation(self, request, *args, **kwargs):
+        obj_subject = None
+        if Subject.objects.filter(code="recommendation").count() != 0:
+            obj_subject = Subject.objects.filter(code="recommendation")[0]
+        if obj_subject is not None:
+            queryset = Topic.objects.filter(subject=obj_subject)
+            serializer = TopicSerializer(queryset, many=True, context=self.get_serializer_context())
+            return Response(serializer.data)
+        return Response(status=HTTP_404_NOT_FOUND)
 
 
 class ColumnTopicViewSet(mixins.RetrieveModelMixin,
