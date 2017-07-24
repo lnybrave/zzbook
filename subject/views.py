@@ -1,16 +1,43 @@
 # !/bin/user/python
 # -*- coding=utf-8 -*-
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 
-from subject.models import Topic, Classification, Ranking
+from subject.models import Topic, Classification, Ranking, Subject
 from subject.serializers import TopicSerializer, ClassificationSerializer, ClassificationDetailSerializer, \
-    RankingDetailSerializer, RankingSerializer
+    RankingDetailSerializer, RankingSerializer, SubjectSerializer
+from utils.const import SUBJECT_COLUMN
 
 
-class TopicViewSet(viewsets.ReadOnlyModelViewSet):
+class SubjectViewSet(mixins.RetrieveModelMixin,
+                     GenericViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
+
+    @list_route(methods=['get'])
+    def recommend(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset().filter(type=SUBJECT_COLUMN))
+        serializer = SubjectSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+
+class ColumnViewSet(mixins.RetrieveModelMixin,
+                    GenericViewSet):
+    queryset = Subject.objects.filter(type=SUBJECT_COLUMN).all()
+    serializer_class = SubjectSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        obj_subject = self.get_object()
+        queryset = Topic.objects.filter(subject=obj_subject)
+        serializer = TopicSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+
+class ColumnTopicViewSet(mixins.RetrieveModelMixin,
+                         GenericViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 

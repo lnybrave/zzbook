@@ -6,6 +6,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 from books.models import Book
+from utils.const import CHOICE_SUBJECT_TYPE, CHOICE_TOPIC_TYPE
 
 
 class Subject(models.Model):
@@ -14,7 +15,7 @@ class Subject(models.Model):
     code = models.CharField(max_length=64, unique=True, verbose_name=u'唯一码')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
     status = models.IntegerField(default=0, verbose_name=u'状态')
-    type = models.IntegerField(default=0, verbose_name=u'类型')
+    type = models.IntegerField(default=0, choices=CHOICE_SUBJECT_TYPE, verbose_name=u'类型')
 
     class Meta:
         db_table = "t_subject"
@@ -28,7 +29,7 @@ class Subject(models.Model):
 class Topic(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
-    type = models.IntegerField(default=0, verbose_name=u'类型')
+    type = models.IntegerField(default=0, choices=CHOICE_TOPIC_TYPE, verbose_name=u'类型')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
     is_recommend = models.BooleanField(verbose_name=u'是否推荐', default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')

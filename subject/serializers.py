@@ -12,7 +12,7 @@ from subject.models import Classification, Ranking, Topic
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
-        fields = '__all__'
+        fields = ('pk', 'name', 'desc', 'type')
 
 
 class TopicSerializer(serializers.ModelSerializer):

@@ -45,10 +45,21 @@ CHOICE_DELETE = (
     (DEL_FLAG_NO, u"否")
 )
 
-# 选择题目的类型
+# 频道类型
+SUBJECT_COLUMN = 1
+SUBJECT_RANKING = 2
+SUBJECT_CLASSIFICATION = 3
+SUBJECT_SEARCH = 4
+CHOICE_SUBJECT_TYPE = (
+    (SUBJECT_COLUMN, u"栏目"),
+    (SUBJECT_RANKING, u"排行"),
+    (SUBJECT_CLASSIFICATION, u"分类"),
+    (SUBJECT_SEARCH, u"搜索"),
+)
 
-CHOICE_QUESTION_TYPE = (
-    ('1', u"选择"),
-    ('2', u"填空"),
-    ('3', u"问答")
+# 专题类型
+CHOICE_TOPIC_TYPE = (
+    ('1', u"专题名+封面"),
+    ('2', u"书名+封面"),
+    ('3', u"书名+封面+简介"),
 )
