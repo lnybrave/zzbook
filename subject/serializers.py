@@ -20,7 +20,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ('pk', 'name', 'desc', 'type', 'is_recommend', 'books')
+        fields = ('pk', 'name', 'desc', 'type', 'books')
 
 
 class ClassificationSerializer(serializers.ModelSerializer):

@@ -10,4 +10,4 @@ class BookshelfSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bookshelf
-        fields = ('book_id', 'book_name')
+        fields = ('book_id', 'name')

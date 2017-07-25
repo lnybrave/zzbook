@@ -10,7 +10,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from subject.models import Topic, Classification, Ranking, Subject
 from subject.serializers import TopicSerializer, ClassificationSerializer, ClassificationDetailSerializer, \
     RankingDetailSerializer, RankingSerializer, SubjectSerializer
-from utils.const import SUBJECT_COLUMN
+from utils.const import SUBJECT_COLUMN, SUBJECT_CODE_RECOMMENDATION
 
 
 class SubjectViewSet(mixins.RetrieveModelMixin,
@@ -20,7 +20,7 @@ class SubjectViewSet(mixins.RetrieveModelMixin,
 
     @list_route(methods=['get'])
     def recommend(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset().filter(type=SUBJECT_COLUMN))
+        queryset = self.filter_queryset(self.get_queryset().filter(is_recommend=True))
         serializer = SubjectSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
@@ -39,8 +39,9 @@ class ColumnViewSet(mixins.RetrieveModelMixin,
     @list_route(methods=['get'])
     def recommendation(self, request, *args, **kwargs):
         obj_subject = None
-        if Subject.objects.filter(code="recommendation").count() != 0:
-            obj_subject = Subject.objects.filter(code="recommendation")[0]
+        qs = Subject.objects.filter(code=SUBJECT_CODE_RECOMMENDATION)
+        if qs.count() != 0:
+            obj_subject = qs[0]
         if obj_subject is not None:
             queryset = Topic.objects.filter(subject=obj_subject)
             serializer = TopicSerializer(queryset, many=True, context=self.get_serializer_context())

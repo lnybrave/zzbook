@@ -13,7 +13,7 @@ class SubjectAdmin(admin.ModelAdmin):
     频道
     """
 
-    list_display = ['name', 'desc', 'sort']
+    list_display = ['name', 'desc', 'code', 'is_recommend', 'status']
 
 
 @admin.register(Topic)
@@ -23,6 +23,8 @@ class TopicAdmin(admin.ModelAdmin):
     """
 
     list_display = ['name', 'desc', 'sort']
+
+    filter_horizontal = ['books']
 
 
 @admin.register(Ranking)
@@ -34,6 +36,8 @@ class RankingAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'status', 'sort']
 
+    filter_horizontal = ['books']
+
 
 @admin.register(Classification)
 class ClassificationAdmin(admin.ModelAdmin):
@@ -43,3 +47,5 @@ class ClassificationAdmin(admin.ModelAdmin):
     )
 
     list_display = ['name', 'status', 'sort']
+
+    filter_horizontal = ['books']

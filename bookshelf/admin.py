@@ -12,4 +12,4 @@ class BookshelfAdmin(admin.ModelAdmin):
     书架
     """
 
-    list_display = ['book_name', 'author_names', 'sort']
+    list_display = ['name', 'author_names', 'sort']

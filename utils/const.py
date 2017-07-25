@@ -57,6 +57,9 @@ CHOICE_SUBJECT_TYPE = (
     (SUBJECT_SEARCH, u"搜索"),
 )
 
+# 频道唯一码
+SUBJECT_CODE_RECOMMENDATION = "subject_recommendation"
+
 # 专题类型
 CHOICE_TOPIC_TYPE = (
     (1, u"专题名+封面"),

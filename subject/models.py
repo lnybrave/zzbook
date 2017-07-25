@@ -14,13 +14,15 @@ class Subject(models.Model):
     desc = models.CharField(max_length=256, verbose_name=u'描述')
     code = models.CharField(max_length=64, unique=True, verbose_name=u'唯一码')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, verbose_name=u'状态')
+    status = models.IntegerField(default=1, verbose_name=u'状态')
+    is_recommend = models.BooleanField(default=False, verbose_name=u'精选')
     type = models.IntegerField(default=0, choices=CHOICE_SUBJECT_TYPE, verbose_name=u'类型')
 
     class Meta:
         db_table = "t_subject"
         verbose_name = u"频道"
         verbose_name_plural = u"频道"
+        ordering = ('sort',)
 
     def __unicode__(self):
         return self.name
@@ -31,7 +33,6 @@ class Topic(models.Model):
     desc = models.CharField(max_length=256, verbose_name=u'描述')
     type = models.IntegerField(default=0, choices=CHOICE_TOPIC_TYPE, verbose_name=u'类型')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
-    is_recommend = models.BooleanField(verbose_name=u'是否推荐', default=False)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')

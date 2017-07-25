@@ -23,10 +23,10 @@ class Bookshelf(models.Model):
     def __unicode__(self):
         return self.book.name
 
-    def book_name(self):
+    def name(self):
         return self.book.name
 
-    book_name.short_description = u"书名"
+    name.short_description = u"书名"
 
     def author_names(self):
         return self.book.author_names()
