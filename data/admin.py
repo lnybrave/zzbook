@@ -64,8 +64,7 @@ class DataAdmin(admin.ModelAdmin):
     actions = ['sync_data']
 
     def sync_data(self, request, queryset):
-        print 'sync data success'
         sync_bookshelf()
-        self.message_user(request, "successfully marked as published.")
+        self.message_user(request, "同步数据成功")
 
-    sync_data.short_description = "Mark selected stories as published"
+    sync_data.short_description = "同步所选的 数据"
