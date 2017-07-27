@@ -1,16 +1,33 @@
 # !/usr/bin/python
 # -*- coding=utf-8 -*-
-
 from django.db import models
 
 from account.models import User
+from utils import storage
 
 
 class Book(models.Model):
     id = models.IntegerField(primary_key=True, verbose_name=u'ID')
     name = models.CharField(max_length=128, verbose_name=u'名称')
     brief = models.CharField(max_length=256, verbose_name=u'简介')
-    author = models.ManyToManyField(User, blank=True)
+    desc = models.CharField(max_length=512, blank=True, null=True, verbose_name=u'描述')
+    cover = models.ImageField(upload_to='images/', blank=True, null=True, storage=storage.ImageStorage(),
+                              verbose_name=u'自定义图片')
+    cover_url = models.CharField(max_length=256, blank=True, null=True, verbose_name=u'大图url')
+    cover_url_small = models.CharField(max_length=256, blank=True, null=True, verbose_name=u'小图url')
+    status = models.IntegerField(default=0, verbose_name=u'状态')
+    first_cid = models.CharField(max_length=64, blank=True, null=True, verbose_name=u'第一章id')
+    last_cid = models.CharField(max_length=64, blank=True, null=True, verbose_name=u'倒数第一章id')
+    chapter_size = models.IntegerField(default=0, verbose_name=u'章节数')
+    score = models.FloatField(default=0, verbose_name=u'分数')
+    word_size = models.CharField(max_length=64, blank=True, null=True, verbose_name=u'字数')
+    click_amount = models.IntegerField(default=0, verbose_name=u'点击量')
+    kw = models.CharField(max_length=256, blank=True, null=True, verbose_name=u'关键字')
+    price = models.IntegerField(default=0, verbose_name=u'价格')
+    charge_mode = models.IntegerField(default=0, verbose_name=u'付费模式')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
+    author = models.ManyToManyField(User, blank=True, verbose_name=u'作者')
 
     class Meta:
         db_table = "t_book"

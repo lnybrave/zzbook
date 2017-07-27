@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'books',
     'bookshelf',
     'subject',
-    'search'
+    'search',
+    'data',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,7 @@ SUIT_CONFIG = {
         {'app': 'bookshelf', 'label': u'书架', 'icon': 'icon-user', },
         {'app': 'subject', 'label': u'频道', 'icon': 'icon-user', },
         {'app': 'search', 'label': u'关键字', 'icon': 'icon-user', },
+        {'app': 'data', 'label': u'数据源', 'icon': 'icon-user', },
     )
 }
 
