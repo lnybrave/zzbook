@@ -1,10 +1,10 @@
 # !/usr/bin/python
 # -*- coding=utf-8 -*-
 
-from subject.models import Topic
 from django.db import models
 
 from books.models import Book
+from subject.models import Topic
 from utils import storage
 
 
@@ -29,12 +29,3 @@ class Banner(models.Model):
 
     def __unicode__(self):
         return self.name
-
-    def get_format_dict(self):
-        return {
-            "id": self.pk,
-            "name": self.name,
-            "desc": self.desc,
-            "img": self.img,
-            "type": self.type
-        }
