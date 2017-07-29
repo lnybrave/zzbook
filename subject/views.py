@@ -19,7 +19,7 @@ class SubjectViewSet(mixins.RetrieveModelMixin,
     serializer_class = SubjectSerializer
 
     @list_route(methods=['get'])
-    def recommend(self, request, *args, **kwargs):
+    def recommendation(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset().filter(is_recommend=True))
         serializer = SubjectSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)

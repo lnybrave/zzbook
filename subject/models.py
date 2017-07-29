@@ -6,6 +6,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 from books.models import Book
+from utils import storage
 from utils.const import CHOICE_SUBJECT_TYPE, CHOICE_TOPIC_TYPE
 
 
@@ -16,6 +17,8 @@ class Subject(models.Model):
     sort = models.IntegerField(default=0, verbose_name=u'排序')
     status = models.IntegerField(default=1, verbose_name=u'状态')
     is_recommend = models.BooleanField(default=False, verbose_name=u'精选')
+    icon = models.ImageField(upload_to='icons/', blank=True, null=True, storage=storage.ImageStorage(),
+                             verbose_name=u'自定义图标')
     type = models.IntegerField(default=0, choices=CHOICE_SUBJECT_TYPE, verbose_name=u'类型')
 
     class Meta:
@@ -26,6 +29,15 @@ class Subject(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def icon_img(self):
+        if self.icon:
+            return '<img src="/media/%s" />' % self.icon
+        else:
+            return '(no image)'
+
+    icon_img.short_description = 'Thumb'
+    icon_img.allow_tags = True
 
 
 class Topic(models.Model):

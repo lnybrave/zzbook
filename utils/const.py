@@ -62,7 +62,7 @@ SUBJECT_CODE_RECOMMENDATION = "subject_recommendation"
 
 # 专题类型
 CHOICE_TOPIC_TYPE = (
-    (1, u"专题名+封面"),
+    (1, u"广告"),
     (2, u"书名+封面"),
     (3, u"书名+封面+简介"),
 )

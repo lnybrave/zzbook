@@ -13,7 +13,8 @@ class SubjectAdmin(admin.ModelAdmin):
     频道
     """
 
-    list_display = ['name', 'desc', 'code', 'is_recommend', 'status']
+    list_display = ['name', 'desc', 'code', 'icon_img', 'is_recommend', 'status']
+    readonly_fields = ('icon_img',)
 
 
 @admin.register(Topic)
