@@ -12,6 +12,7 @@ class BookAdmin(admin.ModelAdmin):
     图书
     """
 
-    list_display = ['name', 'brief', 'author_names']
+    list_display = ['name', 'author_names', 'cover_img', 'status', 'brief', 'chapter_size', 'score', 'charge_mode',
+                    'price']
 
     filter_horizontal = ['author']

@@ -5,6 +5,7 @@ from django.contrib import admin
 from mptt.admin import TreeRelatedFieldListFilter
 
 from subject.models import Subject, Topic, Ranking, Classification
+from utils.const import SUBJECT_COLUMN
 
 
 @admin.register(Subject)
@@ -25,7 +26,14 @@ class TopicAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'desc', 'sort']
 
+    exclude = ['del_flag']
+
     filter_horizontal = ['books']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'subject':
+            kwargs["queryset"] = Subject.objects.filter(type=SUBJECT_COLUMN)
+        return super(TopicAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Ranking)
@@ -36,6 +44,8 @@ class RankingAdmin(admin.ModelAdmin):
     )
 
     list_display = ['name', 'status', 'sort']
+
+    exclude = ['del_flag']
 
     filter_horizontal = ['books']
 
@@ -48,5 +58,7 @@ class ClassificationAdmin(admin.ModelAdmin):
     )
 
     list_display = ['name', 'status', 'sort']
+
+    exclude = ['del_flag']
 
     filter_horizontal = ['books']

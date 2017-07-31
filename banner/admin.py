@@ -11,4 +11,4 @@ class BannerAdmin(admin.ModelAdmin):
     广告
     """
 
-    list_display = ['name', 'desc', 'img', 'type']
+    list_display = ['name', 'type', 'sort', 'desc', 'banner_img']

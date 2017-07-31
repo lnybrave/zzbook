@@ -48,8 +48,8 @@ class Topic(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
-    subject = models.ForeignKey(Subject)
-    books = models.ManyToManyField(Book)
+    subject = models.ForeignKey(Subject, verbose_name=u'所属频道')
+    books = models.ManyToManyField(Book, verbose_name=u'图书')
 
     class Meta:
         db_table = "t_topic"

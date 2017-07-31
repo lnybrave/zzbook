@@ -1,5 +1,6 @@
 # !/usr/bin/python
 # -*- coding=utf-8 -*-
+
 import json
 import urllib2
 
@@ -20,6 +21,7 @@ def sync_book(bid, cm):
 
         try:
             result = json.loads(data, encoding="utf-8")
+            print result
 
             update = Book.objects.filter(id=bid).count() != 0
 
@@ -58,7 +60,9 @@ def sync_bookshelf():
     url = "%s/smart_book/get_bookshelf" % domain
     page = urllib2.urlopen(url)
     result = json.loads(page.read())
+    print result
     books = result['bookshelf']
+
     update_count = 0
     for index, b in enumerate(books):
         if sync_book(b['book_id'], 'zm'):

@@ -1,15 +1,6 @@
 #!/usr/bin/python
 # coding:utf-8
 
-# 实验root菜单
-lab_menu_parent = 7
-
-# 小组root菜单
-team_menu_parent = 4
-
-# 作业root菜单
-work_menu_parent = 5
-
 # 文件上传接口文件保存路径
 API_FILE_SAVE_PATH = 'api'
 
@@ -62,7 +53,26 @@ SUBJECT_CODE_RECOMMENDATION = "subject_recommendation"
 
 # 专题类型
 CHOICE_TOPIC_TYPE = (
-    (1, u"广告"),
-    (2, u"书名+封面"),
-    (3, u"书名+封面+简介"),
+    (1, u"封面+书名"),
+    (2, u"封面+书名+简介"),
 )
+
+# 广告
+BANNER_ALL = 0
+BANNER_BOOKSHELF = 1
+BANNER_RECOMMENDATION = 2
+CHOICE_BANNER = {
+    (BANNER_BOOKSHELF, U"书架广告"),
+    (BANNER_RECOMMENDATION, U"精选广告"),
+}
+
+# 图书状态
+CHOICE_BOOK_STATUS = {
+    (0, u"完结"),
+    (1, u"连载"),
+}
+
+CHOICE_CHARGE_MODE = {
+    (0, u"整本"),
+    (1, u"章节"),
+}
