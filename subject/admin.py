@@ -57,7 +57,9 @@ class ClassificationAdmin(admin.ModelAdmin):
         ('children', TreeRelatedFieldListFilter),
     )
 
-    list_display = ['name', 'status', 'sort']
+    list_display = ['name', 'icon_img', 'status', 'sort']
+
+    readonly_fields = ('icon_img',)
 
     exclude = ['del_flag']
 

@@ -64,6 +64,8 @@ class Classification(MPTTModel):
     name = models.CharField(max_length=50, unique=True, verbose_name=u'名称')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
     status = models.IntegerField(default=1, verbose_name=u'状态')
+    icon = models.ImageField(upload_to='icons/', blank=True, null=True, storage=storage.ImageStorage(),
+                             verbose_name=u'自定义图标')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
@@ -77,6 +79,15 @@ class Classification(MPTTModel):
 
     def __unicode__(self):
         return self.name
+
+    def icon_img(self):
+        if self.icon:
+            return '<img src="/media/%s" />' % self.icon
+        else:
+            return '(no image)'
+
+    icon_img.short_description = 'Thumb'
+    icon_img.allow_tags = True
 
 
 class Ranking(MPTTModel):

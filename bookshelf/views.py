@@ -4,12 +4,11 @@
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
-from bookshelf.models import Bookshelf
-from bookshelf.serializers import BookshelfSerializer
+from books.models import Book
+from books.serializers import BookSerializer
 
 
 class BookshelfViewSet(mixins.ListModelMixin, GenericViewSet):
-    # 联表查询
-    queryset = Bookshelf.objects.all()
-    serializer_class = BookshelfSerializer
+    queryset = Book.objects.filter(bookshelf__isnull=False).order_by('-bookshelf__sort')
+    serializer_class = BookSerializer
     pagination_class = None

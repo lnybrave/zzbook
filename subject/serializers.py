@@ -28,7 +28,7 @@ class ClassificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Classification
-        fields = ('id', 'name', 'children')
+        fields = ('id', 'name', 'icon', 'children')
 
 
 class ClassificationDetailSerializer(serializers.ModelSerializer):
