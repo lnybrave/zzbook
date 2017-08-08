@@ -12,7 +12,7 @@ from subject.models import Classification, Ranking, Topic
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
-        fields = ('pk', 'name', 'desc', 'type', 'icon')
+        fields = ('id', 'name', 'desc', 'type', 'icon')
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ('pk', 'name', 'desc', 'type', 'books')
+        fields = ('id', 'name', 'desc', 'type', 'books')
 
 
 class ClassificationSerializer(serializers.ModelSerializer):
@@ -39,17 +39,25 @@ class ClassificationDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'books')
 
 
-class RankingSerializer(serializers.ModelSerializer):
-    children = serializers.ListSerializer(read_only=True, child=RecursiveField())
-
+class RankingFirstSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ranking
-        fields = ('id', 'name', 'children')
+        fields = ('id', 'name')
 
 
-class RankingDetailSerializer(serializers.ModelSerializer):
+class RankingSerializer(serializers.ModelSerializer):
+    children = serializers.ListSerializer(read_only=True, child=RecursiveField())
     books = BookSerializer(many=True)
 
     class Meta:
         model = Ranking
-        fields = ('id', 'name', 'books')
+        fields = ('id', 'name', 'children', 'books')
+
+
+class RankingDetailSerializer(serializers.ModelSerializer):
+    children = serializers.ListSerializer(read_only=True, child=RecursiveField())
+    books = BookSerializer(many=True)
+
+    class Meta:
+        model = Ranking
+        fields = ('id', 'name', 'children', 'books')

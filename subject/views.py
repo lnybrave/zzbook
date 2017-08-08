@@ -2,14 +2,16 @@
 # -*- coding=utf-8 -*-
 
 from rest_framework import viewsets, mixins
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, api_view, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 
+from books.models import Book
+from books.serializers import BookSerializer
 from subject.models import Topic, Classification, Ranking, Subject
 from subject.serializers import TopicSerializer, ClassificationSerializer, ClassificationDetailSerializer, \
-    RankingDetailSerializer, RankingSerializer, SubjectSerializer
+    RankingDetailSerializer, RankingSerializer, SubjectSerializer, RankingFirstSerializer
 from utils.const import SUBJECT_COLUMN, SUBJECT_CODE_RECOMMENDATION
 
 
@@ -55,7 +57,8 @@ class ColumnTopicViewSet(mixins.RetrieveModelMixin,
     serializer_class = TopicSerializer
 
 
-class ClassificationViewSet(viewsets.ReadOnlyModelViewSet):
+class ClassificationViewSet(mixins.ListModelMixin,
+                            GenericViewSet):
     queryset = Classification.objects.all()
     serializer_class = ClassificationSerializer
     pagination_class = None
@@ -65,9 +68,18 @@ class ClassificationViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = ClassificationSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
-    def retrieve(self, request, *args, **kwargs):
+    @detail_route(methods=['get'])
+    def detail(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = ClassificationDetailSerializer(instance, context=self.get_serializer_context())
+        queryset = Book.objects.filter(classification_books=instance).distinct()
+        serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+    @detail_route(methods=['get'])
+    def all(self, request, *args, **kwargs):
+        instance = self.get_object()
+        queryset = Book.objects.filter(classification_books__parent=instance).distinct()
+        serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
 
@@ -83,5 +95,11 @@ class RankingViewSet(ReadOnlyModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = RankingDetailSerializer(instance, context=self.get_serializer_context())
+        serializer = RankingSerializer(instance, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+    @list_route(methods=['get'])
+    def first(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset().filter(level=0))
+        serializer = RankingFirstSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
