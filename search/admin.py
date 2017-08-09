@@ -12,4 +12,4 @@ class SearchWordAdmin(admin.ModelAdmin):
     搜索
     """
 
-    list_display = ['word']
+    list_display = ['word', 'is_hot', 'count']
