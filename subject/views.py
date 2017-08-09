@@ -1,8 +1,8 @@
 # !/bin/user/python
 # -*- coding=utf-8 -*-
 
-from rest_framework import viewsets, mixins
-from rest_framework.decorators import list_route, api_view, detail_route
+from rest_framework import mixins
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
@@ -10,8 +10,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from books.models import Book
 from books.serializers import BookSerializer
 from subject.models import Topic, Classification, Ranking, Subject
-from subject.serializers import TopicSerializer, ClassificationSerializer, ClassificationDetailSerializer, \
-    RankingDetailSerializer, RankingSerializer, SubjectSerializer, RankingFirstSerializer
+from subject.serializers import TopicSerializer, ClassificationSerializer, RankingDetailSerializer, RankingSerializer, \
+    SubjectSerializer, RankingFirstSerializer
 from utils.const import SUBJECT_COLUMN, SUBJECT_CODE_RECOMMENDATION
 
 
@@ -79,6 +79,28 @@ class ClassificationViewSet(mixins.ListModelMixin,
     def all(self, request, *args, **kwargs):
         instance = self.get_object()
         queryset = Book.objects.filter(classification_books__parent=instance).distinct()
+        serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
+
+
+class ClassificationBooksViewSet(mixins.ListModelMixin,
+                                 GenericViewSet):
+    queryset = Classification.objects.all()
+    serializer_class = ClassificationSerializer
+    pagination_class = None
+    lookup_url_kwarg = ('first_id', 'second_id')
+
+    @list_route(methods=['get'])
+    def books(self, request, *args, **kwargs):
+        first_id = kwargs['first_id']
+        second_id = kwargs['second_id']
+        param = {}
+        if first_id is not None:
+            param['classification_books__parent'] = first_id
+        if second_id is not None:
+            param['classification_books'] = second_id
+        print Book.objects.filter(**param).distinct().query
+        queryset = self.filter_queryset(Book.objects.filter(**param).distinct())
         serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 

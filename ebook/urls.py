@@ -25,7 +25,8 @@ from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
 from search.views import SearchWordViewSet, SearchBookViewSet
-from subject.views import ColumnTopicViewSet, ClassificationViewSet, RankingViewSet, SubjectViewSet, ColumnViewSet
+from subject.views import ColumnTopicViewSet, ClassificationViewSet, RankingViewSet, SubjectViewSet, ColumnViewSet, \
+    ClassificationBooksViewSet
 
 router = DefaultRouter()
 router.register(r'api/account/avatar', AvatarViewSet)
@@ -40,11 +41,14 @@ router.register(r'api/ranking', RankingViewSet)
 router.register(r'api/search', SearchBookViewSet)
 router.register(r'api/search/word', SearchWordViewSet)
 
+classification_books = ClassificationBooksViewSet.as_view({'get': 'books'})
+
 schema_view = get_swagger_view(title='EBook API')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/docs', schema_view),
+    url(r'^api/classification/(?P<first_id>\d+)/(?P<second_id>\d+)/books/$', classification_books),
 ]
 
 urlpatterns += router.urls
