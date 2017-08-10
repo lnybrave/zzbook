@@ -34,7 +34,7 @@ class WordFilter(BaseFilterBackend):
         return coreapi.Field(name='word', required=False, location='query')
 
 
-class SearchAssociateViewSet(mixins.ListModelMixin, GenericViewSet):
+class SearchSuggestViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = SearchWord.objects.all()
     serializer_class = SearchWordSerializer
     pagination_class = None
@@ -47,6 +47,22 @@ class SearchAssociateViewSet(mixins.ListModelMixin, GenericViewSet):
         content = self.request.query_params.get('word', None)
         if content is not None:
             return SearchWord.objects.filter(word__contains=content)
+        return self.queryset
+
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+
+class SearchTopViewSet(mixins.ListModelMixin, GenericViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        count = self.kwargs.get('count', 5)
+        if count is not None:
+            return Book.objects.order_by('-click_amount')[:count]
         return self.queryset
 
     def list(self, request, *args, **kwargs):
