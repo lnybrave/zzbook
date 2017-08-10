@@ -42,7 +42,7 @@ router.register(r'api/search', SearchBookViewSet)
 router.register(r'api/search/word', SearchWordViewSet)
 
 classification_books = ClassificationBooksViewSet.as_view({'get': 'books'})
-search_auto = SearchAutoViewSet.as_view({'get': 'auto'})
+search_auto = SearchAutoViewSet.as_view({'get': 'list'})
 
 schema_view = get_swagger_view(title='EBook API')
 

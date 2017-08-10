@@ -2,9 +2,9 @@
 # -*- coding=utf-8 -*-
 import logging
 
-import django_filters
+import coreapi
 from rest_framework import mixins, filters
-from rest_framework.decorators import list_route
+from rest_framework.filters import BaseFilterBackend
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.viewsets import GenericViewSet
@@ -23,32 +23,33 @@ class SearchWordViewSet(mixins.ListModelMixin, GenericViewSet):
     pagination_class = None
 
 
-class WordFilter(django_filters.rest_framework.FilterSet):
-    def __init__(self):
-        pass
+class WordFilter(BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        content = request.query_params.get('word', None)
+        if content is not None:
+            return SearchWord.objects.filter(word__contains=content)
+        return queryset
 
-    content = django_filters.CharFilter(name="content")
-
-    class Meta:
-        model = SearchWord
-        fields = ['word']
+    def get_schema_fields(self, view):
+        return coreapi.Field(name='word', required=False, location='query')
 
 
 class SearchAutoViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = SearchWord.objects.all()
     serializer_class = SearchWordSerializer
     pagination_class = None
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = WordFilter
 
-    @list_route()
-    def auto(self, request, *args, **kwargs):
-        content = kwargs['content']
+    filter_backends = [filters.DjangoFilterBackend]
+    filter_fields = ['word']  # 对list有效
+
+    def get_queryset(self):
+        content = self.request.query_params.get('word', None)
         if content is not None:
-            return Response(status=HTTP_400_BAD_REQUEST)
+            return SearchWord.objects.filter(word__contains=content)
+        return self.queryset
 
-        queryset = self.filter_queryset(self.get_queryset().filter(word__contains=content))
-        serializer = self.get_serializer(queryset, many=True)
+    def list(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
 
