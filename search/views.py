@@ -34,13 +34,14 @@ class WordFilter(BaseFilterBackend):
         return coreapi.Field(name='word', required=False, location='query')
 
 
-class SearchAutoViewSet(mixins.ListModelMixin, GenericViewSet):
+class SearchAssociateViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = SearchWord.objects.all()
     serializer_class = SearchWordSerializer
     pagination_class = None
 
+    # 对list有效
     filter_backends = [filters.DjangoFilterBackend]
-    filter_fields = ['word']  # 对list有效
+    filter_fields = ['word']
 
     def get_queryset(self):
         content = self.request.query_params.get('word', None)

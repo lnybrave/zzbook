@@ -24,7 +24,7 @@ from account.views import AvatarViewSet
 from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
-from search.views import SearchWordViewSet, SearchBookViewSet, SearchAutoViewSet
+from search.views import SearchWordViewSet, SearchBookViewSet, SearchAssociateViewSet
 from subject.views import ColumnTopicViewSet, ClassificationViewSet, RankingViewSet, SubjectViewSet, ColumnViewSet, \
     ClassificationBooksViewSet
 
@@ -42,7 +42,7 @@ router.register(r'api/search', SearchBookViewSet)
 router.register(r'api/search/word', SearchWordViewSet)
 
 classification_books = ClassificationBooksViewSet.as_view({'get': 'books'})
-search_auto = SearchAutoViewSet.as_view({'get': 'list'})
+search_associate = SearchAssociateViewSet.as_view({'get': 'list'})
 
 schema_view = get_swagger_view(title='ZZBook API')
 
@@ -50,7 +50,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/docs', schema_view),
     url(r'^api/classification/(?P<first_id>\d+)/(?P<second_id>\d+)/books/$', classification_books),
-    url(r'^api/search/auto/$', search_auto),
+    url(r'^api/search/associate/$', search_associate),
 ]
 
 urlpatterns += router.urls
