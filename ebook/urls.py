@@ -39,7 +39,7 @@ router.register(r'api/column/topic', ColumnTopicViewSet)
 router.register(r'api/classification', ClassificationViewSet)
 router.register(r'api/ranking', RankingViewSet)
 router.register(r'api/search', SearchBookViewSet)
-router.register(r'api/search/word', SearchWordViewSet)
+router.register(r'api/search/words', SearchWordViewSet)
 
 schema_view = get_swagger_view(title='ZZBook API')
 
