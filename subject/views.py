@@ -2,7 +2,7 @@
 # -*- coding=utf-8 -*-
 
 from rest_framework import mixins
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
@@ -51,58 +51,35 @@ class ColumnViewSet(mixins.RetrieveModelMixin,
         return Response(status=HTTP_404_NOT_FOUND)
 
 
-class ColumnTopicViewSet(mixins.RetrieveModelMixin,
-                         GenericViewSet):
+class ColumnTopicViewSet(mixins.RetrieveModelMixin, GenericViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
 
-class ClassificationViewSet(mixins.ListModelMixin,
-                            GenericViewSet):
-    queryset = Classification.objects.all()
+class ClassificationViewSet(mixins.ListModelMixin, GenericViewSet):
+    """
+    分类列表
+    """
+    queryset = Classification.objects.filter(level=0).all()
     serializer_class = ClassificationSerializer
     pagination_class = None
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset().filter(level=0))
-        serializer = ClassificationSerializer(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
 
-    @detail_route(methods=['get'])
-    def detail(self, request, *args, **kwargs):
-        instance = self.get_object()
-        queryset = Book.objects.filter(classification_books=instance).distinct()
-        serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
+class ClassificationBooksViewSet(mixins.ListModelMixin, GenericViewSet):
+    """
+    分类详情
+    """
+    serializer_class = BookSerializer
 
-    @detail_route(methods=['get'])
-    def all(self, request, *args, **kwargs):
-        instance = self.get_object()
-        queryset = Book.objects.filter(classification_books__parent=instance).distinct()
-        serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
-
-
-class ClassificationBooksViewSet(mixins.ListModelMixin,
-                                 GenericViewSet):
-    queryset = Classification.objects.all()
-    serializer_class = ClassificationSerializer
-    pagination_class = None
-    lookup_url_kwarg = ('first_id', 'second_id')
-
-    @list_route(methods=['get'])
-    def books(self, request, *args, **kwargs):
-        first_id = kwargs['first_id']
-        second_id = kwargs['second_id']
+    def get_queryset(self):
+        first_id = int(self.kwargs.get('first_id', '0'))
+        second_id = int(self.kwargs.get('second_id', '0'))
         param = {}
-        if first_id is not None:
+        if first_id != 0:
             param['classification_books__parent'] = first_id
-        if second_id is not None:
+        if second_id != 0:
             param['classification_books'] = second_id
-        print Book.objects.filter(**param).distinct().query
-        queryset = self.filter_queryset(Book.objects.filter(**param).distinct())
-        serializer = BookSerializer(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
+        return Book.objects.filter(**param).distinct()
 
 
 class RankingViewSet(ReadOnlyModelViewSet):

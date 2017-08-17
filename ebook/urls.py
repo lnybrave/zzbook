@@ -46,8 +46,8 @@ schema_view = get_swagger_view(title='ZZBook API')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/docs', schema_view),
-    url(r'^api/classification/(?P<first_id>\d+)/(?P<second_id>\d+)/books/$',
-        ClassificationBooksViewSet.as_view({'get': 'books'})),
+    url(r'^api/classification/(?P<first_id>\d+)/(?P<second_id>\d+)/books$',
+        ClassificationBooksViewSet.as_view({'get': 'list'})),
     url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view({'get': 'list'})),
     url(r'^api/search/top/(?P<count>\d+)?', SearchTopViewSet.as_view({'get': 'list'})),
 ]
