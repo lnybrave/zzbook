@@ -15,6 +15,7 @@ class Banner(models.Model):
     """
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
+    url = models.CharField(max_length=256, blank=True, null=True, verbose_name=u'web')
     img = models.ImageField(upload_to='banners/', storage=storage.ImageStorage(), verbose_name=u'图片')
     type = models.IntegerField(default=0, choices=CHOICE_BANNER, verbose_name=u'类型')
     sort = models.IntegerField(default=0, verbose_name=u'排序')

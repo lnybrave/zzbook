@@ -24,18 +24,19 @@ from account.views import AvatarViewSet
 from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
+from menu.views import MenuViewSet
+from recommend.views import RecommendViewSet
 from search.views import SearchWordViewSet, SearchBookViewSet, SearchSuggestViewSet, SearchTopViewSet
-from subject.views import ColumnTopicViewSet, ClassificationViewSet, RankingViewSet, SubjectViewSet, ColumnViewSet, \
-    ClassificationBooksViewSet
+from subject.views import ClassificationViewSet, RankingViewSet, ClassificationBooksViewSet, ColumnViewSet
 
 router = DefaultRouter()
 router.register(r'api/account/avatar', AvatarViewSet)
 router.register(r'api/banner', BannerViewSet)
 router.register(r'api/book', BookViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
-router.register(r'api/subject', SubjectViewSet)
+router.register(r'api/menu', MenuViewSet)
+router.register(r'api/recommend', RecommendViewSet)
 router.register(r'api/column', ColumnViewSet)
-router.register(r'api/column/topic', ColumnTopicViewSet)
 router.register(r'api/classification', ClassificationViewSet)
 router.register(r'api/ranking', RankingViewSet)
 router.register(r'api/search', SearchBookViewSet)
