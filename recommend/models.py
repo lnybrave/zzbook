@@ -30,3 +30,10 @@ class Recommend(models.Model):
 
     title.short_description = '名称'
     title.allow_tags = True
+
+    def type(self):
+        if self.topic is not None:
+            return "专题"
+        if self.book is not None:
+            return "图书"
+        return "unknown"

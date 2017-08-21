@@ -4,6 +4,7 @@
 from rest_framework import serializers
 from rest_framework_recursive.fields import RecursiveField
 
+from books.models import Book
 from books.serializers import BookSerializer
 from subject.models import Classification, Ranking, Topic, Column
 
@@ -17,7 +18,6 @@ class TopicSerializer(serializers.ModelSerializer):
 
 
 class ColumnSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Column
         fields = ('id', 'name', 'desc')
@@ -29,7 +29,7 @@ class ColumnDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        fields = ('id', 'name', 'desc', 'children', 'books', 'topics')
+        fields = ('id', 'name', 'desc', 'books', 'topics')
 
 
 class ClassificationSerializer(serializers.ModelSerializer):
@@ -48,25 +48,23 @@ class ClassificationDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'books')
 
 
-class RankingFirstSerializer(serializers.ModelSerializer):
+class RankingItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ranking
         fields = ('id', 'name')
 
 
-class RankingSerializer(serializers.ModelSerializer):
-    children = serializers.ListSerializer(read_only=True, child=RecursiveField())
-    books = BookSerializer(many=True)
+# noinspection PyMethodMayBeStatic
+class RankingItemWithBooksSerializer(serializers.ModelSerializer):
+    books = serializers.SerializerMethodField('get_top_books')
 
     class Meta:
         model = Ranking
-        fields = ('id', 'name', 'children', 'books')
+        fields = ('id', 'name', 'books')
 
-
-class RankingDetailSerializer(serializers.ModelSerializer):
-    children = serializers.ListSerializer(read_only=True, child=RecursiveField())
-    books = BookSerializer(many=True)
-
-    class Meta:
-        model = Ranking
-        fields = ('id', 'name', 'children', 'books')
+    def get_top_books(self, obj):
+        """
+        获取前几本图示
+        """
+        indicators = Book.objects.filter(ranking_books=obj)[:3]
+        return BookSerializer(indicators, many=True).data

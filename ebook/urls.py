@@ -27,7 +27,8 @@ from bookshelf.views import BookshelfViewSet
 from menu.views import MenuViewSet
 from recommend.views import RecommendViewSet
 from search.views import SearchWordViewSet, SearchBookViewSet, SearchSuggestViewSet, SearchTopViewSet
-from subject.views import ClassificationViewSet, RankingViewSet, ClassificationBooksViewSet, ColumnViewSet
+from subject.views import ClassificationViewSet, RankingItemViewSet, ClassificationBooksViewSet, ColumnViewSet, \
+    RankingViewSet, RankingItemBooksViewSet, TopicViewSet, ClassificationItemViewSet
 
 router = DefaultRouter()
 router.register(r'api/account/avatar', AvatarViewSet)
@@ -36,9 +37,16 @@ router.register(r'api/book', BookViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
 router.register(r'api/menu', MenuViewSet)
 router.register(r'api/recommend', RecommendViewSet)
+router.register(r'api/topic', TopicViewSet)
 router.register(r'api/column', ColumnViewSet)
 router.register(r'api/classification', ClassificationViewSet)
+classification_item = ClassificationItemViewSet.as_view({'get': 'list'})
+classification_books = ClassificationBooksViewSet.as_view({'get': 'list'})
 router.register(r'api/ranking', RankingViewSet)
+ranking_item = RankingItemViewSet.as_view({'get': 'list'})
+ranking_item_with_books = RankingItemViewSet.as_view({'get': 'with_books'})
+ranking_item_default = RankingItemViewSet.as_view({'get': 'default'})
+ranking_item_books = RankingItemBooksViewSet.as_view({'get': 'list'})
 router.register(r'api/search', SearchBookViewSet)
 router.register(r'api/search/words', SearchWordViewSet)
 
@@ -47,10 +55,13 @@ schema_view = get_swagger_view(title='ZZBook API')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/docs', schema_view),
-    url(r'^api/classification/(?P<first_id>\d+)/(?P<second_id>\d+)/books$',
-        ClassificationBooksViewSet.as_view({'get': 'list'})),
+    url(r'^api/classification/(?P<id>\d+)/subitems/$', classification_item),
+    url(r'^api/classification/(?P<parent>\d+)/subitems/(?P<id>\d+)/books/$', classification_books),
+    url(r'^api/ranking/(?P<id>\d+)/subitems/$', ranking_item),
+    url(r'^api/ranking/(?P<id>\d+)/subitems_with_books/$', ranking_item_with_books),
+    url(r'^api/ranking/(?P<id>\d+)/books/$', ranking_item_books),
     url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view({'get': 'list'})),
-    url(r'^api/search/top/(?P<count>\d+)?', SearchTopViewSet.as_view({'get': 'list'})),
+    url(r'^api/search/top/(?P<count>\d+)/$', SearchTopViewSet.as_view({'get': 'list'})),
 ]
 
 urlpatterns += router.urls

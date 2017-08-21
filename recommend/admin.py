@@ -10,4 +10,4 @@ class RecommendAdmin(admin.ModelAdmin):
     """
     精选
     """
-    list_display = ['title', 'status']
+    list_display = ['title', 'type', 'status']
