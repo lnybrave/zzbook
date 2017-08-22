@@ -18,7 +18,6 @@ class Topic(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
-    books = models.ManyToManyField(Book, verbose_name=u'图书')
 
     class Meta:
         db_table = "t_topic"
@@ -29,6 +28,38 @@ class Topic(models.Model):
         return self.name
 
 
+class TopicConfig(models.Model):
+    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    item = models.ForeignKey(Topic, verbose_name=u'专题')
+    book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+
+    class Meta:
+        db_table = "t_topic_config"
+        verbose_name = u"专题配置"
+        verbose_name_plural = u"专题配置"
+
+    def item_name(self):
+        if self.item is not None:
+            return self.item.name
+        return "no title"
+
+    item_name.short_description = '名称'
+    item_name.allow_tags = True
+    
+    def title(self):
+        if self.book is not None:
+            return self.book.name
+        return "no title"
+
+    title.short_description = '名称'
+    title.allow_tags = True
+
+    def type(self):
+        if self.book is not None:
+            return "图书"
+        return "unknown"
+
+
 class Column(MPTTModel):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
@@ -36,8 +67,6 @@ class Column(MPTTModel):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
-    topics = models.ManyToManyField(Topic, blank=True, related_name='topics')
-    books = models.ManyToManyField(Book, blank=True, related_name='column_books')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
 
     class Meta:
@@ -49,6 +78,43 @@ class Column(MPTTModel):
         return self.name
 
 
+class ColumnConfig(models.Model):
+    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    item = models.ForeignKey(Column, verbose_name=u'栏目')
+    topic = models.ForeignKey(Topic, blank=True, null=True, verbose_name='专题')
+    book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+
+    class Meta:
+        db_table = "t_column_config"
+        verbose_name = u"栏目配置"
+        verbose_name_plural = u"栏目配置"
+
+    def item_name(self):
+        if self.item is not None:
+            return self.item.name
+        return "no title"
+
+    item_name.short_description = '名称'
+    item_name.allow_tags = True
+
+    def title(self):
+        if self.topic is not None:
+            return self.topic.name
+        if self.book is not None:
+            return self.book.name
+        return "no title"
+
+    title.short_description = '名称'
+    title.allow_tags = True
+
+    def type(self):
+        if self.topic is not None:
+            return "专题"
+        if self.book is not None:
+            return "图书"
+        return "unknown"
+
+
 class Classification(MPTTModel):
     name = models.CharField(max_length=50, unique=True, verbose_name=u'名称')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
@@ -57,7 +123,6 @@ class Classification(MPTTModel):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
-    books = models.ManyToManyField(Book, blank=True, related_name='classification_books')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
 
     class Meta:
@@ -78,6 +143,38 @@ class Classification(MPTTModel):
     icon_img.allow_tags = True
 
 
+class ClassificationConfig(models.Model):
+    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    item = models.ForeignKey(Classification, verbose_name=u'分类')
+    book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+
+    class Meta:
+        db_table = "t_classification_config"
+        verbose_name = u"分类配置"
+        verbose_name_plural = u"分类配置"
+
+    def item_name(self):
+        if self.item is not None:
+            return self.item.name
+        return "no title"
+
+    item_name.short_description = '名称'
+    item_name.allow_tags = True
+
+    def title(self):
+        if self.book is not None:
+            return self.book.name
+        return "no title"
+
+    title.short_description = '名称'
+    title.allow_tags = True
+
+    def type(self):
+        if self.book is not None:
+            return "图书"
+        return "unknown"
+
+
 class Ranking(MPTTModel):
     name = models.CharField(max_length=50, verbose_name=u'名称')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
@@ -85,7 +182,6 @@ class Ranking(MPTTModel):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
-    books = models.ManyToManyField(Book, blank=True, related_name='ranking_books')
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
 
     class Meta:
@@ -95,3 +191,35 @@ class Ranking(MPTTModel):
 
     def __unicode__(self):
         return self.name
+
+
+class RankingConfig(models.Model):
+    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    item = models.ForeignKey(Ranking, verbose_name=u'排行')
+    book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+
+    class Meta:
+        db_table = "t_ranking_config"
+        verbose_name = u"排行配置"
+        verbose_name_plural = u"排行配置"
+
+    def item_name(self):
+        if self.item is not None:
+            return self.item.name
+        return "no title"
+
+    item_name.short_description = '名称'
+    item_name.allow_tags = True
+
+    def title(self):
+        if self.book is not None:
+            return self.book.name
+        return "no title"
+
+    title.short_description = '名称'
+    title.allow_tags = True
+
+    def type(self):
+        if self.book is not None:
+            return "图书"
+        return "unknown"

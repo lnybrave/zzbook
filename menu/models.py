@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from subject.models import Topic, Column, Classification, Ranking
+from subject.models import Topic, ColumnConfig, Classification, Ranking, Column
 from utils import storage
 
 

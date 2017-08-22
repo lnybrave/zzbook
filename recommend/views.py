@@ -7,9 +7,9 @@ from recommend.models import Recommend
 from recommend.serializers import RecommendSerializer
 
 
-class RecommendViewSet(mixins.ListModelMixin, GenericViewSet):
+class RecommendationViewSet(mixins.ListModelMixin, GenericViewSet):
     """
-    精选列表
+    精选
     """
     queryset = Recommend.objects.all()
     serializer_class = RecommendSerializer

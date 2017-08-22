@@ -14,12 +14,18 @@ logger = logging.getLogger(__name__)
 
 
 class BannerViewSet(mixins.ListModelMixin, GenericViewSet):
+    """
+    轮播广告
+    """
     queryset = Banner.objects.all()
     serializer_class = BannerSerializer
     pagination_class = None
 
     @list_route(methods=['get'])
     def bookshelf(self, request):
+        """
+        书架广告
+        """
         data_set = self.get_queryset().filter(type=2)
         serializer = BannerSerializer(data_set, many=True)
         return Response(serializer.data)

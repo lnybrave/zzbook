@@ -9,6 +9,9 @@ from books.serializers import BookSerializer
 
 
 class BookViewSet(mixins.RetrieveModelMixin, GenericViewSet):
+    """
+    图书详情
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     pagination_class = None

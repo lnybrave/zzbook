@@ -4,7 +4,8 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 
-from subject.models import Topic, Ranking, Classification, Column
+from subject.models import Topic, Ranking, Classification, ColumnConfig, Column, ClassificationConfig, RankingConfig, \
+    TopicConfig
 
 
 @admin.register(Topic)
@@ -16,7 +17,13 @@ class TopicAdmin(admin.ModelAdmin):
 
     exclude = ['del_flag']
 
-    filter_horizontal = ['books']
+
+@admin.register(TopicConfig)
+class TopicConfigAdmin(admin.ModelAdmin):
+    """
+    专题
+    """
+    list_display = ['item_name', 'title', 'type', 'sort']
 
 
 @admin.register(Column)
@@ -28,7 +35,13 @@ class ColumnAdmin(MPTTModelAdmin):
 
     exclude = ['del_flag']
 
-    filter_horizontal = ['books']
+
+@admin.register(ColumnConfig)
+class ColumnConfigAdmin(admin.ModelAdmin):
+    """
+    栏目
+    """
+    list_display = ['item_name', 'title', 'type', 'sort']
 
 
 @admin.register(Classification)
@@ -42,7 +55,13 @@ class ClassificationAdmin(MPTTModelAdmin):
 
     exclude = ['del_flag']
 
-    filter_horizontal = ['books']
+
+@admin.register(ClassificationConfig)
+class ClassificationConfigAdmin(admin.ModelAdmin):
+    """
+    分类
+    """
+    list_display = ['item_name', 'title', 'type', 'sort']
 
 
 @admin.register(Ranking)
@@ -55,4 +74,10 @@ class RankingAdmin(MPTTModelAdmin):
 
     exclude = ['del_flag']
 
-    filter_horizontal = ['books']
+
+@admin.register(RankingConfig)
+class RankingConfigAdmin(admin.ModelAdmin):
+    """
+    排行
+    """
+    list_display = ['item_name', 'title', 'type', 'sort']

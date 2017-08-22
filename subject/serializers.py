@@ -6,15 +6,25 @@ from rest_framework_recursive.fields import RecursiveField
 
 from books.models import Book
 from books.serializers import BookSerializer
-from subject.models import Classification, Ranking, Topic, Column
+from subject.models import Classification, Ranking, Topic, Column, ColumnConfig, ClassificationConfig
 
 
 class TopicSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
+    class Meta:
+        model = Topic
+        fields = ('id', 'name', 'desc', 'type')
+
+
+class TopicDetailSerializer(serializers.ModelSerializer):
+    books = serializers.SerializerMethodField('get_all_books')
 
     class Meta:
         model = Topic
         fields = ('id', 'name', 'desc', 'type', 'books')
+
+    def get_all_books(self, obj):
+        indicators = Book.objects.filter(topicconfig__item=obj).all()
+        return BookSerializer(indicators, many=True).data
 
 
 class ColumnSerializer(serializers.ModelSerializer):
@@ -23,13 +33,25 @@ class ColumnSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'desc')
 
 
+class ColumnConfigSerializer(serializers.ModelSerializer):
+    topic = TopicSerializer()
+    book = BookSerializer()
+
+    class Meta:
+        model = ColumnConfig
+        fields = ('topic', 'book')
+
+
 class ColumnDetailSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
-    topics = TopicSerializer(many=True)
+    items = serializers.SerializerMethodField('get_all_books')
 
     class Meta:
         model = Column
-        fields = ('id', 'name', 'desc', 'books', 'topics')
+        fields = ('id', 'name', 'desc', 'items')
+
+    def get_all_books(self, obj):
+        indicators = ColumnConfig.objects.filter(item=obj).all()
+        return ColumnConfigSerializer(indicators, many=True).data
 
 
 class ClassificationSerializer(serializers.ModelSerializer):
@@ -40,12 +62,19 @@ class ClassificationSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'icon', 'children')
 
 
-class ClassificationDetailSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True)
-
-    class Meta:
-        model = Classification
-        fields = ('id', 'name', 'books')
+# class ClassificationDetailSerializer(serializers.ModelSerializer):
+#     """
+#     分类详情
+#     """
+#     books = serializers.SerializerMethodField('get_all_books')
+#
+#     class Meta:
+#         model = Classification
+#         fields = ('id', 'name', 'books')
+#
+#     def get_all_books(self, obj):
+#         indicators = Book.objects.filter(classificationconfig__item=obj).all()
+#         return BookSerializer(indicators, many=True).data
 
 
 class RankingItemSerializer(serializers.ModelSerializer):
@@ -66,5 +95,5 @@ class RankingItemWithBooksSerializer(serializers.ModelSerializer):
         """
         获取前几本图示
         """
-        indicators = Book.objects.filter(ranking_books=obj)[:3]
+        indicators = Book.objects.filter(rankingconfig__item=obj)[:3]
         return BookSerializer(indicators, many=True).data

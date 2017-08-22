@@ -2,18 +2,17 @@
 # -*- coding=utf-8 -*-
 
 from rest_framework import mixins
-from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from books.models import Book
 from books.serializers import BookSerializer
-from subject.models import Classification, Ranking, Column, Topic
+from subject.models import Classification, Ranking, Topic, Column
 from subject.serializers import ClassificationSerializer, RankingItemSerializer, ColumnSerializer, \
-    ColumnDetailSerializer, TopicSerializer, RankingItemWithBooksSerializer
+    ColumnDetailSerializer, TopicSerializer, RankingItemWithBooksSerializer, TopicDetailSerializer
 
 
-class TopicViewSet(ReadOnlyModelViewSet):
+class TopicViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     专题
     """
@@ -22,7 +21,16 @@ class TopicViewSet(ReadOnlyModelViewSet):
     pagination_class = None
 
 
-class ColumnViewSet(ReadOnlyModelViewSet):
+class TopicDetailViewSet(mixins.RetrieveModelMixin, GenericViewSet):
+    """
+    专题详情
+    """
+    queryset = Topic.objects.all()
+    serializer_class = TopicDetailSerializer
+    pagination_class = None
+
+
+class ColumnViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     栏目
     """
@@ -35,99 +43,99 @@ class ColumnViewSet(ReadOnlyModelViewSet):
         serializer = ColumnSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = ColumnDetailSerializer(instance)
-        return Response(serializer.data)
+
+class ColumnDetailViewSet(mixins.RetrieveModelMixin, GenericViewSet):
+    """
+    栏目详情
+    """
+    queryset = Column.objects.filter(level=0).all()
+    serializer_class = ColumnDetailSerializer
+    pagination_class = None
 
 
 class ClassificationViewSet(mixins.ListModelMixin, GenericViewSet):
     """
-    默认一级菜单列表
+    默认或子项分类列表
     """
     queryset = Classification.objects.all()
     serializer_class = ClassificationSerializer
     pagination_class = None
+    filter_fields = ['parent']
 
     def get_queryset(self):
-        p = Classification.objects.filter(level=0)[0]
-        return super(ClassificationViewSet, self).get_queryset().filter(parent=p)
-
-
-class ClassificationItemViewSet(mixins.ListModelMixin, GenericViewSet):
-    """
-    一级或子项菜单列表
-    """
-    queryset = Classification.objects.all()
-    serializer_class = ClassificationSerializer
-    pagination_class = None
-
-    def get_queryset(self):
-        classification_id = int(self.kwargs.get('id', '0'))
-        return super(ClassificationItemViewSet, self).get_queryset().filter(parent=classification_id)
+        parent = self.request.query_params.get('parent', None)
+        if parent is None:
+            qs = Classification.objects.filter(level=0)
+            if qs.count() != 0:
+                parent = qs[0]
+                return Classification.objects.filter(parent=parent)
+        return super(ClassificationViewSet, self).get_queryset()
 
 
 class ClassificationBooksViewSet(mixins.ListModelMixin, GenericViewSet):
     """
-    图书列表
+    分类图书列表
     """
     serializer_class = BookSerializer
 
     def get_queryset(self):
-        first_id = int(self.kwargs.get('parent', '0'))
-        second_id = int(self.kwargs.get('id', '0'))
+        first_id = self.kwargs.get('parent', None)
+        second_id = self.kwargs.get('id', None)
         param = {}
-        if first_id != 0:
-            param['classification_books__parent'] = first_id
-        if second_id != 0:
-            param['classification_books'] = second_id
+        if first_id is not None:
+            param['classificationconfig__item__parent'] = first_id
+        if second_id is not None:
+            param['classificationconfig__item'] = second_id
         return Book.objects.filter(**param).distinct()
 
 
 class RankingViewSet(mixins.ListModelMixin, GenericViewSet):
     """
-    默认一级菜单列表
+    默认或子项排行列表
     """
     queryset = Ranking.objects.all()
     serializer_class = RankingItemSerializer
     pagination_class = None
+    filter_fields = ['parent']
 
     def get_queryset(self):
-        p = Ranking.objects.filter(level=0)[0]
-        return super(RankingViewSet, self).get_queryset().filter(parent=p)
+        parent = self.request.query_params.get('parent', None)
+        if parent is None:
+            qs = Ranking.objects.filter(level=0)
+            if qs.count() != 0:
+                parent = qs[0]
+                return Ranking.objects.filter(parent=parent)
+        return super(RankingViewSet, self).get_queryset()
 
 
-class RankingItemViewSet(mixins.ListModelMixin, GenericViewSet):
+class RankingWithBooksViewSet(mixins.ListModelMixin, GenericViewSet):
     """
-    一级或子项菜单列表
+    排行子项列表（附带前几本图书）
     """
     queryset = Ranking.objects.all()
-    serializer_class = RankingItemSerializer
+    serializer_class = RankingItemWithBooksSerializer
     pagination_class = None
+    filter_fields = ['parent']
 
     def get_queryset(self):
-        ranking_id = int(self.kwargs.get('id', '0'))
-        return super(RankingItemViewSet, self).get_queryset().filter(parent=ranking_id)
-
-    @list_route(methods=['get'])
-    def with_books(self, request, *args, **kwargs):
-        """
-        子项列表，附带前几名图书
-        """
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = RankingItemWithBooksSerializer(queryset, many=True, context=self.get_serializer_context())
-        return Response(serializer.data)
+        parent = self.request.query_params.get('parent', None)
+        if parent is None:
+            qs = Ranking.objects.filter(level=0)
+            if qs.count() != 0:
+                parent = qs[0]
+                return Ranking.objects.filter(parent=parent)
+        return super(RankingWithBooksViewSet, self).get_queryset()
 
 
-class RankingItemBooksViewSet(mixins.ListModelMixin, GenericViewSet):
+class RankingBooksViewSet(mixins.ListModelMixin, GenericViewSet):
     """
-    图书列表
+    排行图书列表
     """
     serializer_class = BookSerializer
 
     def get_queryset(self):
-        first_id = int(self.kwargs.get('id', '0'))
+        first_id = self.kwargs.get('id', None)
         param = {}
-        if first_id != 0:
-            param['ranking_books'] = first_id
+        if first_id is not None:
+            param['rankingconfig__item'] = first_id
         return Book.objects.filter(**param).distinct()

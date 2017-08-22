@@ -4,7 +4,7 @@
 from django.contrib import admin
 
 from menu.models import Menu
-from subject.models import Topic, Column, Ranking, Classification
+from subject.models import Topic, Ranking, Classification, Column
 
 
 @admin.register(Menu)

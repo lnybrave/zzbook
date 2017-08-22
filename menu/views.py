@@ -9,6 +9,9 @@ from menu.serializers import MenuSerializer
 
 
 class MenuViewSet(mixins.ListModelMixin, GenericViewSet):
+    """
+    菜单
+    """
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     pagination_class = None
