@@ -38,3 +38,18 @@ class Menu(models.Model):
 
     icon_img.short_description = 'Thumb'
     icon_img.allow_tags = True
+
+    def type(self):
+        if self.topic:
+            return 0
+        if self.column:
+            return 1
+        if self.ranking:
+            return 2
+        if self.classification:
+            return 3
+        else:
+            return 0
+
+    type.short_description = 'type'
+    type.allow_tags = True
