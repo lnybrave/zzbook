@@ -7,11 +7,12 @@ from django.db import models
 
 from books.models import Book
 from subject.models import Topic
+from utils.const import CHOICE_STATUS
 
 
 class Recommend(models.Model):
     sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=1, verbose_name=u'状态')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     topic = models.ForeignKey(Topic, blank=True, null=True, verbose_name=u'专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name=u'图书')
 

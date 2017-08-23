@@ -4,6 +4,7 @@
 from django.db import models
 
 from books.models import Book
+from utils.const import CHOICE_STATUS
 
 
 class Bookshelf(models.Model):
@@ -11,6 +12,7 @@ class Bookshelf(models.Model):
     书架
     """
     sort = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     book = models.OneToOneField(Book, primary_key=True)
@@ -45,11 +47,3 @@ class Bookshelf(models.Model):
 
     cover_img.short_description = '封面'
     cover_img.allow_tags = True
-
-    def status(self):
-        if self.book.status:
-            return self.book.status
-        return 0
-
-    status.short_description = '状态'
-    status.allow_tags = True

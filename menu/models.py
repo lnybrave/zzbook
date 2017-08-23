@@ -6,13 +6,14 @@ from django.db import models
 
 from subject.models import Topic, ColumnConfig, Classification, Ranking, Column
 from utils import storage
+from utils.const import CHOICE_STATUS
 
 
 class Menu(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
     sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=1, verbose_name=u'状态')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     is_recommend = models.BooleanField(default=False, verbose_name=u'精选')
     icon = models.ImageField(upload_to='icons/', blank=True, null=True, storage=storage.ImageStorage())
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')

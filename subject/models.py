@@ -7,14 +7,14 @@ from mptt.models import MPTTModel
 
 from books.models import Book
 from utils import storage
-from utils.const import CHOICE_TOPIC_TYPE
+from utils.const import CHOICE_TOPIC_TYPE, CHOICE_STATUS
 
 
 class Topic(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
     type = models.IntegerField(default=0, choices=CHOICE_TOPIC_TYPE, verbose_name=u'类型')
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
@@ -30,6 +30,7 @@ class Topic(models.Model):
 
 class TopicConfig(models.Model):
     sort = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Topic, verbose_name=u'专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
 
@@ -45,7 +46,7 @@ class TopicConfig(models.Model):
 
     item_name.short_description = '名称'
     item_name.allow_tags = True
-    
+
     def title(self):
         if self.book is not None:
             return self.book.name
@@ -80,6 +81,7 @@ class Column(MPTTModel):
 
 class ColumnConfig(models.Model):
     sort = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Column, verbose_name=u'栏目')
     topic = models.ForeignKey(Topic, blank=True, null=True, verbose_name='专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
@@ -145,6 +147,7 @@ class Classification(MPTTModel):
 
 class ClassificationConfig(models.Model):
     sort = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Classification, verbose_name=u'分类')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
 
@@ -195,6 +198,7 @@ class Ranking(MPTTModel):
 
 class RankingConfig(models.Model):
     sort = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Ranking, verbose_name=u'排行')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
 

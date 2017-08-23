@@ -39,7 +39,8 @@ router.register(r'api/stack/menu', MenuViewSet)
 router.register(r'api/stack/recommendation', RecommendationViewSet)
 router.register(r'api/stack/topic', TopicViewSet)
 router.register(r'api/stack/topic', TopicDetailViewSet)
-router.register(r'api/stack/column', ColumnDetailViewSet)
+router.register(r'api/stack/column', ColumnViewSet)
+column_detail = ColumnDetailViewSet.as_view({'get': 'list'})
 router.register(r'api/stack/classification', ClassificationViewSet)
 classification_books = ClassificationBooksViewSet.as_view({'get': 'list'})
 router.register(r'api/stack/ranking', RankingViewSet)
@@ -53,6 +54,7 @@ schema_view = get_swagger_view(title='ZZBook API')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/docs', schema_view),
+    url(r'^api/stack/column/(?P<id>\d+)/detail/$', column_detail),
     url(r'^api/stack/classification/(?P<parent>\d+)/(?P<id>\d+)/books/$', classification_books),
     url(r'^api/stack/ranking/(?P<id>\d+)/books/$', ranking_books),
     url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view({'get': 'list'})),

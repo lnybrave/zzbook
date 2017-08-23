@@ -51,7 +51,12 @@ class ColumnDetailViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     queryset = ColumnConfig.objects.all()
     serializer_class = ColumnConfigSerializer
-    filter_fields = ['item']
+
+    def get_queryset(self):
+        item = self.kwargs.get('id', None)
+        if item is not None:
+            return ColumnConfig.objects.filter(item=item).all()
+        return super(ColumnDetailViewSet, self).get_queryset()
 
 
 class ClassificationViewSet(mixins.ListModelMixin, GenericViewSet):

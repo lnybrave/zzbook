@@ -13,7 +13,7 @@ class TopicAdmin(admin.ModelAdmin):
     """
     专题
     """
-    list_display = ['name', 'desc', 'sort']
+    list_display = ['name', 'desc', 'type', 'status']
 
     exclude = ['del_flag']
 

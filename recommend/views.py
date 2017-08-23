@@ -5,11 +5,12 @@ from rest_framework.viewsets import GenericViewSet
 
 from recommend.models import Recommend
 from recommend.serializers import RecommendSerializer
+from utils.const import STATUS_ON
 
 
 class RecommendationViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     精选
     """
-    queryset = Recommend.objects.all()
+    queryset = Recommend.objects.filter(status=STATUS_ON)
     serializer_class = RecommendSerializer
