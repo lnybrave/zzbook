@@ -14,11 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.shortcuts import render
+from forms_builder.forms.models import Form
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
+from forms_builder.forms import urls as form_urls
 
 from account.views import AvatarViewSet
 from banner.views import BannerViewSet
@@ -54,6 +57,7 @@ schema_view = get_swagger_view(title='ZZBook API')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^forms/', include(form_urls)),
     url(r'^api/docs', schema_view),
     url(r'^api/classification/(?P<id>\d+)/subitems/$', classification_item),
     url(r'^api/classification/(?P<parent>\d+)/subitems/(?P<id>\d+)/books/$', classification_books),
@@ -62,6 +66,8 @@ urlpatterns = [
     url(r'^api/ranking/(?P<id>\d+)/books/$', ranking_item_books),
     url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view({'get': 'list'})),
     url(r'^api/search/top/(?P<count>\d+)/$', SearchTopViewSet.as_view({'get': 'list'})),
+    url(r'^$', lambda request: render(request, "index.html",
+                                      {"forms": Form.objects.all()})),
 ]
 
 urlpatterns += router.urls

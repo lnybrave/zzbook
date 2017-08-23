@@ -31,13 +31,15 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.159']
 # Application definition
 
 INSTALLED_APPS = [
-    'suit',  # 必须放在admin前面
+    # 'suit',  # 必须放在admin前面
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'forms_builder.forms',
 
     'rest_framework',
     'rest_framework_swagger',
@@ -70,6 +72,7 @@ SUIT_CONFIG = {
     'HEADER_DATE_FORMAT': 'Y年 F j日 l',
     'LIST_PER_PAGE': 20,
     'MENU': (
+        {'app': 'forms_builder.forms', 'label': u'form', 'icon': 'icon-user', },
         {'app': 'account', 'label': u'用户', 'icon': 'icon-user', },
         {'app': 'banner', 'label': u'广告', 'icon': 'icon-user', },
         {'app': 'books', 'label': u'图书', 'icon': 'icon-user', },
@@ -171,3 +174,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'account.User'  # 系统
+
+FORMS_BUILDER_EXTRA_FIELDS = (
+    (100, "django.forms.BooleanField", "My cool checkbox"),
+)
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
