@@ -7,9 +7,10 @@ from rest_framework.viewsets import GenericViewSet
 
 from books.models import Book
 from books.serializers import BookSerializer
-from subject.models import Classification, Ranking, Topic, Column
+from subject.models import Classification, Ranking, Topic, Column, ColumnConfig
 from subject.serializers import ClassificationSerializer, RankingItemSerializer, ColumnSerializer, \
-    ColumnDetailSerializer, TopicSerializer, RankingItemWithBooksSerializer, TopicDetailSerializer
+    TopicSerializer, RankingItemWithBooksSerializer, TopicDetailSerializer, \
+    ColumnConfigSerializer
 
 
 class TopicViewSet(mixins.ListModelMixin, GenericViewSet):
@@ -44,13 +45,13 @@ class ColumnViewSet(mixins.ListModelMixin, GenericViewSet):
         return Response(serializer.data)
 
 
-class ColumnDetailViewSet(mixins.RetrieveModelMixin, GenericViewSet):
+class ColumnDetailViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     栏目详情
     """
-    queryset = Column.objects.filter(level=0).all()
-    serializer_class = ColumnDetailSerializer
-    pagination_class = None
+    queryset = ColumnConfig.objects.all()
+    serializer_class = ColumnConfigSerializer
+    filter_fields = ['item']
 
 
 class ClassificationViewSet(mixins.ListModelMixin, GenericViewSet):

@@ -6,7 +6,7 @@ from rest_framework_recursive.fields import RecursiveField
 
 from books.models import Book
 from books.serializers import BookSerializer
-from subject.models import Classification, Ranking, Topic, Column, ColumnConfig, ClassificationConfig
+from subject.models import Classification, Ranking, Topic, Column, ColumnConfig
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -34,12 +34,12 @@ class ColumnSerializer(serializers.ModelSerializer):
 
 
 class ColumnConfigSerializer(serializers.ModelSerializer):
-    topic = TopicSerializer()
     book = BookSerializer()
+    topic = TopicDetailSerializer()
 
     class Meta:
         model = ColumnConfig
-        fields = ('topic', 'book')
+        fields = ('book', 'topic')
 
 
 class ColumnDetailSerializer(serializers.ModelSerializer):
