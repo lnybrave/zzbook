@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'forms_builder.forms',
 
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'rest_framework_swagger',
 
     'mptt',
@@ -67,41 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SUIT_CONFIG = {
-    'ADMIN_NAME': u'管理平台',
-    'HEADER_DATE_FORMAT': 'Y年 F j日 l',
-    'LIST_PER_PAGE': 20,
-    'MENU': (
-        {'app': 'forms_builder.forms', 'label': u'form', 'icon': 'icon-user', },
-        {'app': 'account', 'label': u'用户', 'icon': 'icon-user', },
-        {'app': 'banner', 'label': u'广告', 'icon': 'icon-user', },
-        {'app': 'books', 'label': u'图书', 'icon': 'icon-user', },
-        {'app': 'bookshelf', 'label': u'书架', 'icon': 'icon-user', },
-        {'app': 'menu', 'label': u'菜单', 'icon': 'icon-user', },
-        {'app': 'subject', 'label': u'频道', 'icon': 'icon-user', },
-        {'app': 'recommend', 'label': u'精选', 'icon': 'icon-user', },
-        {'app': 'search', 'label': u'关键字', 'icon': 'icon-user', },
-        {'app': 'data', 'label': u'数据源', 'icon': 'icon-user', },
-    )
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
-    'PAGE_SIZE': 20,
-}
-
-REST_SESSION_LOGIN = False
-
-SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': False,
-    'APIS_SORTER': 'alpha'
-}
-
 ROOT_URLCONF = 'ebook.urls'
-
-# default is 10 pixels
-MPTT_ADMIN_LEVEL_INDENT = 20
 
 TEMPLATES = [
     {
@@ -152,12 +120,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-SITE_ID = 1
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False
+USE_TZ = False  # Time Zone
 DATETIME_FORMAT = 'Y-m-d H:i:s'  # suit在admin里设置时间的一个小bug。需要把时间格式指定一下
 DATE_FORMAT = 'Y-m-d'
 
@@ -175,7 +142,52 @@ STATIC_ROOT = os.path.join(SITE_ROOT, 'collectstatic')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-AUTH_USER_MODEL = 'account.User'  # 系统
+# suit
+SUIT_CONFIG = {
+    'ADMIN_NAME': u'管理平台',
+    'HEADER_DATE_FORMAT': 'Y年 F j日 l',
+    'LIST_PER_PAGE': 20,
+    'MENU': (
+        {'app': 'account', 'label': u'用户', 'icon': 'icon-user', },
+        {'app': 'banner', 'label': u'广告', 'icon': 'icon-user', },
+        {'app': 'books', 'label': u'图书', 'icon': 'icon-user', },
+        {'app': 'bookshelf', 'label': u'书架', 'icon': 'icon-user', },
+        {'app': 'menu', 'label': u'菜单', 'icon': 'icon-user', },
+        {'app': 'subject', 'label': u'频道', 'icon': 'icon-user', },
+        {'app': 'recommend', 'label': u'精选', 'icon': 'icon-user', },
+        {'app': 'search', 'label': u'关键字', 'icon': 'icon-user', },
+        {'app': 'data', 'label': u'数据源', 'icon': 'icon-user', },
+    )
+}
+
+# rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'PAGE_SIZE': 20,
+}
+
+REST_SESSION_LOGIN = True
+
+# swagger
+SWAGGER_SETTINGS = {
+    # 'USE_SESSION_AUTH': False,
+    # 'APIS_SORTER': 'alpha',
+    # 'LOGIN_URL': 'login',
+    # 'LOGOUT_URL': 'logout',
+}
+
+# auth user
+AUTH_USER_MODEL = 'account.User'
+
+# default is 10 pixels
+MPTT_ADMIN_LEVEL_INDENT = 20
+
+SITE_ID = 1
 
 FORMS_BUILDER_EXTRA_FIELDS = (
     (100, "django.forms.BooleanField", "My cool checkbox"),

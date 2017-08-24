@@ -25,7 +25,7 @@ class TopicConfigAdmin(admin.ModelAdmin):
     """
     专题
     """
-    list_display = ['item_name', 'title', 'type', 'sort']
+    list_display = ['item_name', 'title', 'type', 'order']
 
 
 @admin.register(Column)
@@ -43,7 +43,7 @@ class ColumnConfigAdmin(admin.ModelAdmin):
     """
     栏目
     """
-    list_display = ['item_name', 'title', 'type', 'sort']
+    list_display = ['item_name', 'title', 'type', 'order']
 
 
 @admin.register(Classification)
@@ -51,7 +51,7 @@ class ClassificationAdmin(MPTTModelAdmin):
     """
     分类
     """
-    list_display = ['name', 'icon_img', 'status', 'sort']
+    list_display = ['name', 'icon_img', 'status', 'order']
 
     readonly_fields = ('icon_img',)
 
@@ -65,7 +65,7 @@ class ClassificationConfigAdmin(admin.ModelAdmin):
     """
     分类
     """
-    list_display = ['item_name', 'title', 'type', 'sort']
+    list_display = ['item_name', 'title', 'type', 'order']
 
 
 @admin.register(Ranking)
@@ -74,7 +74,7 @@ class RankingAdmin(MPTTModelAdmin):
     排行
     """
 
-    list_display = ['name', 'status', 'sort']
+    list_display = ['name', 'status', 'order']
 
     exclude = ['del_flag']
 
@@ -86,4 +86,4 @@ class RankingConfigAdmin(admin.ModelAdmin):
     """
     排行
     """
-    list_display = ['item_name', 'title', 'type', 'sort']
+    list_display = ['item_name', 'title', 'type', 'order']

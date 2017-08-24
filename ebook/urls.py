@@ -17,13 +17,11 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.shortcuts import render
 from forms_builder.forms import urls as form_urls
-from forms_builder.forms.models import Form
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
-from account.views import UploadAvatarAPIViewSet, UserLoginAPIView, UserLogoutAPIView
+from account.views import UploadAvatarAPIViewSet
 from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
@@ -43,30 +41,32 @@ router.register(r'api/stack/recommendation', RecommendationViewSet)
 router.register(r'api/stack/topic', TopicViewSet)
 router.register(r'api/stack/topic', TopicDetailViewSet)
 router.register(r'api/stack/column', ColumnViewSet)
-column_detail = ColumnDetailViewSet.as_view({'get': 'list'})
 router.register(r'api/stack/classification', ClassificationViewSet)
-classification_books = ClassificationBooksViewSet.as_view({'get': 'list'})
 router.register(r'api/stack/ranking', RankingViewSet)
 router.register(r'api/stack/ranking/with_books', RankingWithBooksViewSet)
-ranking_books = RankingBooksViewSet.as_view({'get': 'list'})
 router.register(r'api/search', SearchBookViewSet)
 router.register(r'api/search/words', SearchWordViewSet)
-
-schema_view = get_swagger_view(title='ZZBook API')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^forms/', include(form_urls)),
-    url(r'^api/docs', schema_view),
-    url(r'^api/account/login/$', UserLoginAPIView.as_view()),
-    url(r'^api/account/logout/$', UserLogoutAPIView.as_view()),
-    url(r'^api/stack/column/(?P<id>\d+)/detail/$', column_detail),
-    url(r'^api/stack/classification/(?P<parent>\d+)/(?P<id>\d+)/books/$', classification_books),
-    url(r'^api/stack/ranking/(?P<id>\d+)/books/$', ranking_books),
-    url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view({'get': 'list'})),
-    url(r'^api/search/top/(?P<count>\d+)/$', SearchTopViewSet.as_view({'get': 'list'})),
-    url(r'^$', lambda request: render(request, "index.html",
-                                      {"forms": Form.objects.all()})),
+    url(r'^api/auth/', include('rest_auth.urls')),
+    url(r'^api/stack/column/(?P<id>\d+)/detail/$', ColumnDetailViewSet.as_view(
+        {'get': 'list'}
+    )),
+    url(r'^api/stack/classification/(?P<parent>\d+)/(?P<id>\d+)/books/$', ClassificationBooksViewSet.as_view(
+        {'get': 'list'}
+    )),
+    url(r'^api/stack/ranking/(?P<id>\d+)/books/$', RankingBooksViewSet.as_view(
+        {'get': 'list'}
+    )),
+    url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view(
+        {'get': 'list'}
+    )),
+    url(r'^api/search/top/(?P<count>\d+)/$', SearchTopViewSet.as_view(
+        {'get': 'list'}
+    )),
+    url(r'^docs', get_swagger_view(title='ZZBook API'), name='api_docs'),
 ]
 
 urlpatterns += router.urls
