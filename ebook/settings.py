@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.159']
 # Application definition
 
 INSTALLED_APPS = [
-    # 'suit',  # 必须放在admin前面
+    'suit',  # 必须放在admin前面
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,6 +90,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'PAGE_SIZE': 20,
 }
+
+REST_SESSION_LOGIN = False
 
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,

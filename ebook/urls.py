@@ -18,12 +18,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.shortcuts import render
+from forms_builder.forms import urls as form_urls
 from forms_builder.forms.models import Form
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
-from forms_builder.forms import urls as form_urls
 
-from account.views import AvatarViewSet
+from account.views import UploadAvatarAPIViewSet, UserLoginAPIView, UserLogoutAPIView
 from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
@@ -34,7 +34,7 @@ from subject.views import ClassificationViewSet, ClassificationBooksViewSet, Col
     RankingViewSet, RankingBooksViewSet, TopicViewSet, RankingWithBooksViewSet, TopicDetailViewSet, ColumnDetailViewSet
 
 router = DefaultRouter()
-router.register(r'api/account/avatar', AvatarViewSet)
+router.register(r'api/account/avatar', UploadAvatarAPIViewSet)
 router.register(r'api/banner', BannerViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
 router.register(r'api/stack/book', BookViewSet)
@@ -58,6 +58,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^forms/', include(form_urls)),
     url(r'^api/docs', schema_view),
+    url(r'^api/account/login/$', UserLoginAPIView.as_view()),
+    url(r'^api/account/logout/$', UserLogoutAPIView.as_view()),
     url(r'^api/stack/column/(?P<id>\d+)/detail/$', column_detail),
     url(r'^api/stack/classification/(?P<parent>\d+)/(?P<id>\d+)/books/$', classification_books),
     url(r'^api/stack/ranking/(?P<id>\d+)/books/$', ranking_books),
