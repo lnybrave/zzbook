@@ -5,12 +5,12 @@ from rest_framework import serializers
 
 from books.serializers import BookSerializer
 from recommend.models import Recommend
-from subject.serializers import TopicSerializer
+from subject.serializers import TopicDetailSerializer
 
 
 class RecommendSerializer(serializers.ModelSerializer):
     book = BookSerializer()
-    topic = TopicSerializer()
+    topic = TopicDetailSerializer()
 
     class Meta:
         model = Recommend

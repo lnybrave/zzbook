@@ -76,3 +76,12 @@ CHOICE_CHARGE_MODE = {
     (0, u"整本"),
     (1, u"章节"),
 }
+
+# 图书、专题状态
+STATUS_ON = 1
+STATUS_OFF = 2
+CHOICE_STATUS = {
+    (0, u"审核"),
+    (1, u"上架"),
+    (2, u"下架"),
+}

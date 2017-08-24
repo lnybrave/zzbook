@@ -28,28 +28,27 @@ from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
 from menu.views import MenuViewSet
-from recommend.views import RecommendViewSet
+from recommend.views import RecommendationViewSet
 from search.views import SearchWordViewSet, SearchBookViewSet, SearchSuggestViewSet, SearchTopViewSet
-from subject.views import ClassificationViewSet, RankingItemViewSet, ClassificationBooksViewSet, ColumnViewSet, \
-    RankingViewSet, RankingItemBooksViewSet, TopicViewSet, ClassificationItemViewSet
+from subject.views import ClassificationViewSet, ClassificationBooksViewSet, ColumnViewSet, \
+    RankingViewSet, RankingBooksViewSet, TopicViewSet, RankingWithBooksViewSet, TopicDetailViewSet, ColumnDetailViewSet
 
 router = DefaultRouter()
 router.register(r'api/account/avatar', AvatarViewSet)
 router.register(r'api/banner', BannerViewSet)
-router.register(r'api/book', BookViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
-router.register(r'api/menu', MenuViewSet)
-router.register(r'api/recommend', RecommendViewSet)
-router.register(r'api/topic', TopicViewSet)
-router.register(r'api/column', ColumnViewSet)
-router.register(r'api/classification', ClassificationViewSet)
-classification_item = ClassificationItemViewSet.as_view({'get': 'list'})
+router.register(r'api/stack/book', BookViewSet)
+router.register(r'api/stack/menu', MenuViewSet)
+router.register(r'api/stack/recommendation', RecommendationViewSet)
+router.register(r'api/stack/topic', TopicViewSet)
+router.register(r'api/stack/topic', TopicDetailViewSet)
+router.register(r'api/stack/column', ColumnViewSet)
+column_detail = ColumnDetailViewSet.as_view({'get': 'list'})
+router.register(r'api/stack/classification', ClassificationViewSet)
 classification_books = ClassificationBooksViewSet.as_view({'get': 'list'})
-router.register(r'api/ranking', RankingViewSet)
-ranking_item = RankingItemViewSet.as_view({'get': 'list'})
-ranking_item_with_books = RankingItemViewSet.as_view({'get': 'with_books'})
-ranking_item_default = RankingItemViewSet.as_view({'get': 'default'})
-ranking_item_books = RankingItemBooksViewSet.as_view({'get': 'list'})
+router.register(r'api/stack/ranking', RankingViewSet)
+router.register(r'api/stack/ranking/with_books', RankingWithBooksViewSet)
+ranking_books = RankingBooksViewSet.as_view({'get': 'list'})
 router.register(r'api/search', SearchBookViewSet)
 router.register(r'api/search/words', SearchWordViewSet)
 
@@ -59,11 +58,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^forms/', include(form_urls)),
     url(r'^api/docs', schema_view),
-    url(r'^api/classification/(?P<id>\d+)/subitems/$', classification_item),
-    url(r'^api/classification/(?P<parent>\d+)/subitems/(?P<id>\d+)/books/$', classification_books),
-    url(r'^api/ranking/(?P<id>\d+)/subitems/$', ranking_item),
-    url(r'^api/ranking/(?P<id>\d+)/subitems_with_books/$', ranking_item_with_books),
-    url(r'^api/ranking/(?P<id>\d+)/books/$', ranking_item_books),
+    url(r'^api/stack/column/(?P<id>\d+)/detail/$', column_detail),
+    url(r'^api/stack/classification/(?P<parent>\d+)/(?P<id>\d+)/books/$', classification_books),
+    url(r'^api/stack/ranking/(?P<id>\d+)/books/$', ranking_books),
     url(r'^api/search/suggest/$', SearchSuggestViewSet.as_view({'get': 'list'})),
     url(r'^api/search/top/(?P<count>\d+)/$', SearchTopViewSet.as_view({'get': 'list'})),
     url(r'^$', lambda request: render(request, "index.html",

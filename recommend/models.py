@@ -7,11 +7,12 @@ from django.db import models
 
 from books.models import Book
 from subject.models import Topic
+from utils.const import CHOICE_STATUS
 
 
 class Recommend(models.Model):
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=1, verbose_name=u'状态')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     topic = models.ForeignKey(Topic, blank=True, null=True, verbose_name=u'专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name=u'图书')
 
@@ -19,7 +20,7 @@ class Recommend(models.Model):
         db_table = "t_recommend"
         verbose_name = u"精选"
         verbose_name_plural = u"精选"
-        ordering = ('sort',)
+        ordering = ('order',)
 
     def title(self):
         if self.topic is not None:

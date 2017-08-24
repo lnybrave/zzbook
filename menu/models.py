@@ -4,15 +4,16 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from subject.models import Topic, Column, Classification, Ranking
+from subject.models import Topic, ColumnConfig, Classification, Ranking, Column
 from utils import storage
+from utils.const import CHOICE_STATUS
 
 
 class Menu(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=1, verbose_name=u'状态')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     is_recommend = models.BooleanField(default=False, verbose_name=u'精选')
     icon = models.ImageField(upload_to='icons/', blank=True, null=True, storage=storage.ImageStorage())
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
@@ -25,7 +26,7 @@ class Menu(models.Model):
         db_table = "t_menu"
         verbose_name = u"菜单"
         verbose_name_plural = u"菜单"
-        ordering = ('sort',)
+        ordering = ('order',)
 
     def __unicode__(self):
         return self.name
@@ -38,3 +39,18 @@ class Menu(models.Model):
 
     icon_img.short_description = 'Thumb'
     icon_img.allow_tags = True
+
+    def type(self):
+        if self.topic:
+            return 0
+        if self.column:
+            return 1
+        if self.ranking:
+            return 2
+        if self.classification:
+            return 3
+        else:
+            return 0
+
+    type.short_description = 'type'
+    type.allow_tags = True

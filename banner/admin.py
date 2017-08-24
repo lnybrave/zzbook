@@ -1,14 +1,15 @@
 # !/usr/bin/python
 # -*- coding=utf-8 -*-
 from django.contrib import admin
+from suit.admin import SortableModelAdmin
 
 from banner.models import Banner
 
 
 @admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
+class BannerAdmin(SortableModelAdmin):
     """
     广告
     """
 
-    list_display = ['name', 'type', 'sort', 'desc', 'banner_img']
+    list_display = ['name', 'type', 'order', 'desc', 'banner_img']
