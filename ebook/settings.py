@@ -26,7 +26,7 @@ SECRET_KEY = 'l4o_sxak#azb53qm#z^czpn*z58*6os+1l&_t4x)_n$gis_5mk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.161']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.159']
 
 # Application definition
 

@@ -2,17 +2,18 @@
 # -*- coding=utf-8 -*-
 
 from django.contrib import admin
+from suit.admin import SortableModelAdmin
 
 from menu.models import Menu
 from subject.models import Topic, Ranking, Classification, Column
 
 
 @admin.register(Menu)
-class MenuAdmin(admin.ModelAdmin):
+class MenuAdmin(SortableModelAdmin):
     """
     菜单
     """
-    list_display = ['name', 'desc', 'icon_img', 'is_recommend', 'status']
+    list_display = ['name', 'desc', 'icon_img', 'order', 'is_recommend', 'status']
 
     exclude = ['del_flag', 'icon_img']
 

@@ -17,6 +17,8 @@ class TopicAdmin(admin.ModelAdmin):
 
     exclude = ['del_flag']
 
+    search_fields = ['name']
+
 
 @admin.register(TopicConfig)
 class TopicConfigAdmin(admin.ModelAdmin):
@@ -31,7 +33,7 @@ class ColumnAdmin(MPTTModelAdmin):
     """
     栏目
     """
-    list_display = ['name', 'sort']
+    list_display = ['name', 'order']
 
     exclude = ['del_flag']
 
@@ -55,6 +57,8 @@ class ClassificationAdmin(MPTTModelAdmin):
 
     exclude = ['del_flag']
 
+    search_fields = ['name']
+
 
 @admin.register(ClassificationConfig)
 class ClassificationConfigAdmin(admin.ModelAdmin):
@@ -73,6 +77,8 @@ class RankingAdmin(MPTTModelAdmin):
     list_display = ['name', 'status', 'sort']
 
     exclude = ['del_flag']
+
+    search_fields = ['name']
 
 
 @admin.register(RankingConfig)

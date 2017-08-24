@@ -12,7 +12,7 @@ from utils.const import CHOICE_STATUS
 class Menu(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
     status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     is_recommend = models.BooleanField(default=False, verbose_name=u'精选')
     icon = models.ImageField(upload_to='icons/', blank=True, null=True, storage=storage.ImageStorage())
@@ -26,7 +26,7 @@ class Menu(models.Model):
         db_table = "t_menu"
         verbose_name = u"菜单"
         verbose_name_plural = u"菜单"
-        ordering = ('sort',)
+        ordering = ('order',)
 
     def __unicode__(self):
         return self.name

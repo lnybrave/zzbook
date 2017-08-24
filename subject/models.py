@@ -64,7 +64,7 @@ class TopicConfig(models.Model):
 class Column(MPTTModel):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
     del_flag = models.IntegerField(default=0, verbose_name=u'删除')
@@ -74,6 +74,7 @@ class Column(MPTTModel):
         db_table = "t_column"
         verbose_name = u"栏目"
         verbose_name_plural = u"栏目"
+        ordering = ('order',)
 
     def __unicode__(self):
         return self.name
