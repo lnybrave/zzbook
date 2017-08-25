@@ -29,10 +29,10 @@ class Topic(models.Model):
 
 
 class TopicConfig(models.Model):
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Topic, verbose_name=u'专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_topic_config"
@@ -81,11 +81,11 @@ class Column(MPTTModel):
 
 
 class ColumnConfig(models.Model):
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Column, verbose_name=u'栏目')
     topic = models.ForeignKey(Topic, blank=True, null=True, verbose_name='专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_column_config"
@@ -147,10 +147,10 @@ class Classification(MPTTModel):
 
 
 class ClassificationConfig(models.Model):
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Classification, verbose_name=u'分类')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_classification_config"
@@ -198,10 +198,10 @@ class Ranking(MPTTModel):
 
 
 class RankingConfig(models.Model):
-    sort = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Ranking, verbose_name=u'排行')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_ranking_config"

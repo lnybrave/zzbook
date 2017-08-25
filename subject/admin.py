@@ -3,9 +3,16 @@
 
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
+from suit.admin import SortableTabularInline
 
 from subject.models import Topic, Ranking, Classification, ColumnConfig, Column, ClassificationConfig, RankingConfig, \
     TopicConfig
+
+
+class TopicInline(SortableTabularInline):
+    model = TopicConfig
+    extra = 0
+    fk_name = 'item'
 
 
 @admin.register(Topic)
@@ -19,13 +26,13 @@ class TopicAdmin(admin.ModelAdmin):
 
     search_fields = ['name']
 
+    inlines = [TopicInline]
 
-@admin.register(TopicConfig)
-class TopicConfigAdmin(admin.ModelAdmin):
-    """
-    专题
-    """
-    list_display = ['item_name', 'title', 'type', 'sort']
+
+class ColumnInline(SortableTabularInline):
+    model = ColumnConfig
+    extra = 0
+    fk_name = 'item'
 
 
 @admin.register(Column)
@@ -37,13 +44,13 @@ class ColumnAdmin(MPTTModelAdmin):
 
     exclude = ['del_flag']
 
+    inlines = [ColumnInline]
 
-@admin.register(ColumnConfig)
-class ColumnConfigAdmin(admin.ModelAdmin):
-    """
-    栏目
-    """
-    list_display = ['item_name', 'title', 'type', 'sort']
+
+class ClassificationInline(SortableTabularInline):
+    model = ClassificationConfig
+    extra = 0
+    fk_name = 'item'
 
 
 @admin.register(Classification)
@@ -59,13 +66,13 @@ class ClassificationAdmin(MPTTModelAdmin):
 
     search_fields = ['name']
 
+    inlines = [ClassificationInline]
 
-@admin.register(ClassificationConfig)
-class ClassificationConfigAdmin(admin.ModelAdmin):
-    """
-    分类
-    """
-    list_display = ['item_name', 'title', 'type', 'sort']
+
+class RankingInline(SortableTabularInline):
+    model = RankingConfig
+    extra = 0
+    fk_name = 'item'
 
 
 @admin.register(Ranking)
@@ -80,10 +87,4 @@ class RankingAdmin(MPTTModelAdmin):
 
     search_fields = ['name']
 
-
-@admin.register(RankingConfig)
-class RankingConfigAdmin(admin.ModelAdmin):
-    """
-    排行
-    """
-    list_display = ['item_name', 'title', 'type', 'sort']
+    inlines = [RankingInline]
