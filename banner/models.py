@@ -22,7 +22,7 @@ class Banner(models.Model):
     status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
-    book = models.ForeignKey(Book, blank=True, null=True, related_name='book')
+    book = models.ForeignKey(Book, blank=True, null=True, related_name='book', on_delete=models.SET_NULL)
     topic = models.ForeignKey(Topic, blank=True, null=True, related_name='topic')
 
     class Meta:

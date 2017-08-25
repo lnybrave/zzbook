@@ -23,6 +23,7 @@ class Topic(models.Model):
         db_table = "t_topic"
         verbose_name = u"专题"
         verbose_name_plural = u"专题"
+        ordering = ('-create_time',)
 
     def __unicode__(self):
         return self.name
@@ -38,6 +39,7 @@ class TopicConfig(models.Model):
         db_table = "t_topic_config"
         verbose_name = u"专题配置"
         verbose_name_plural = u"专题配置"
+        unique_together = ('item', 'book')
 
     def item_name(self):
         if self.item is not None:
