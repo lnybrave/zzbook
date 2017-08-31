@@ -39,6 +39,7 @@ class TopicConfig(models.Model):
         db_table = "t_topic_config"
         verbose_name = u"专题配置"
         verbose_name_plural = u"专题配置"
+        ordering = ('order',)
         unique_together = ('item', 'book')
 
     def item_name(self):
@@ -91,6 +92,7 @@ class ColumnConfig(models.Model):
 
     class Meta:
         db_table = "t_column_config"
+        ordering = ('order',)
         verbose_name = u"栏目配置"
         verbose_name_plural = u"栏目配置"
 
@@ -158,6 +160,7 @@ class ClassificationConfig(models.Model):
         db_table = "t_classification_config"
         verbose_name = u"分类配置"
         verbose_name_plural = u"分类配置"
+        ordering = ('order',)
 
     def item_name(self):
         if self.item is not None:
@@ -209,6 +212,7 @@ class RankingConfig(models.Model):
         db_table = "t_ranking_config"
         verbose_name = u"排行配置"
         verbose_name_plural = u"排行配置"
+        ordering = ('order',)
 
     def item_name(self):
         if self.item is not None:

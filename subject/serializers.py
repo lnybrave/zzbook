@@ -95,5 +95,5 @@ class RankingItemWithBooksSerializer(serializers.ModelSerializer):
         """
         获取前几本图示
         """
-        indicators = Book.objects.filter(rankingconfig__item=obj)[:3]
+        indicators = Book.objects.filter(rankingconfig__item=obj).order_by('rankingconfig__order')[:3]
         return BookSerializer(indicators, many=True).data
