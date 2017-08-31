@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     class Meta:
-        db_table = "t_user"
+        db_table = "auth_user"
         verbose_name_plural = u"用户表"
         verbose_name = u"用户表"
 
