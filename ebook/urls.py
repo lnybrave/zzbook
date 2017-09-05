@@ -16,11 +16,9 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from forms_builder.forms import urls as form_urls
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
-from account.views import UploadAvatarAPIViewSet
 from banner.views import BannerViewSet
 from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
@@ -31,7 +29,6 @@ from subject.views import ClassificationViewSet, ClassificationBooksViewSet, Col
     RankingViewSet, RankingBooksViewSet, TopicViewSet, RankingWithBooksViewSet, TopicDetailViewSet, ColumnDetailViewSet
 
 router = DefaultRouter()
-router.register(r'api/account/avatar', UploadAvatarAPIViewSet)
 router.register(r'api/banner', BannerViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
 router.register(r'api/stack/book', BookViewSet)
@@ -48,8 +45,7 @@ router.register(r'api/search/words', SearchWordViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^forms/', include(form_urls)),
-    url(r'^api/auth/', include('rest_auth.urls')),
+    url(r'^api/account/', include('account.urls')),
     url(r'^api/stack/column/(?P<id>\d+)/detail/$', ColumnDetailViewSet.as_view(
         {'get': 'list'}
     )),

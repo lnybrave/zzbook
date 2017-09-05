@@ -39,11 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'forms_builder.forms',
 
     'rest_framework',
-    'rest_framework.authtoken',
-    'rest_auth',
     'rest_framework_swagger',
 
     'mptt',
@@ -204,11 +201,3 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 
 SITE_ID = 1
 
-FORMS_BUILDER_EXTRA_FIELDS = (
-    (100, "django.forms.BooleanField", "My cool checkbox"),
-)
-
-try:
-    from local_settings import *
-except ImportError:
-    pass
