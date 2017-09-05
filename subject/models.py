@@ -23,21 +23,24 @@ class Topic(models.Model):
         db_table = "t_topic"
         verbose_name = u"专题"
         verbose_name_plural = u"专题"
+        ordering = ('-create_time',)
 
     def __unicode__(self):
         return self.name
 
 
 class TopicConfig(models.Model):
-    order = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Topic, verbose_name=u'专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_topic_config"
         verbose_name = u"专题配置"
         verbose_name_plural = u"专题配置"
+        ordering = ('order',)
+        unique_together = ('item', 'book')
 
     def item_name(self):
         if self.item is not None:
@@ -81,14 +84,15 @@ class Column(MPTTModel):
 
 
 class ColumnConfig(models.Model):
-    order = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Column, verbose_name=u'栏目')
     topic = models.ForeignKey(Topic, blank=True, null=True, verbose_name='专题')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_column_config"
+        ordering = ('order',)
         verbose_name = u"栏目配置"
         verbose_name_plural = u"栏目配置"
 
@@ -147,15 +151,16 @@ class Classification(MPTTModel):
 
 
 class ClassificationConfig(models.Model):
-    order = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Classification, verbose_name=u'分类')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_classification_config"
         verbose_name = u"分类配置"
         verbose_name_plural = u"分类配置"
+        ordering = ('order',)
 
     def item_name(self):
         if self.item is not None:
@@ -198,15 +203,16 @@ class Ranking(MPTTModel):
 
 
 class RankingConfig(models.Model):
-    order = models.IntegerField(default=0, verbose_name=u'排序')
-    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
     item = models.ForeignKey(Ranking, verbose_name=u'排行')
     book = models.ForeignKey(Book, blank=True, null=True, verbose_name='图书')
+    order = models.IntegerField(default=0, verbose_name=u'排序')
+    status = models.IntegerField(default=0, choices=CHOICE_STATUS, verbose_name=u'状态')
 
     class Meta:
         db_table = "t_ranking_config"
         verbose_name = u"排行配置"
         verbose_name_plural = u"排行配置"
+        ordering = ('order',)
 
     def item_name(self):
         if self.item is not None:

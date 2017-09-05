@@ -26,7 +26,7 @@ SECRET_KEY = 'l4o_sxak#azb53qm#z^czpn*z58*6os+1l&_t4x)_n$gis_5mk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.159']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.159', '192.168.1.163']
 
 # Application definition
 
@@ -92,10 +92,25 @@ WSGI_APPLICATION = 'ebook.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+if DEBUG:
+    HOST = 'rm-uf6s5p3l1ye9670hdo.mysql.rds.aliyuncs.com'
+    DB_NAME = 'zzbook'
+    DB_USER = 'root'
+    DB_PWD = 'Lny380120'
+else:
+    HOST = 'rm-uf6s5p3l1ye9670hd.mysql.rds.aliyuncs.com'
+    DB_NAME = 'zzbook'
+    DB_USER = 'root'
+    DB_PWD = 'Lny380120'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PWD,
+        'HOST': HOST,
+        'PORT': '3306'
     }
 }
 

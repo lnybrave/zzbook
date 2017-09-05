@@ -14,7 +14,7 @@ from utils.const import STATUS_ON
 
 
 class BookshelfViewSet(mixins.ListModelMixin, GenericViewSet):
-    queryset = Book.objects.filter(bookshelf__isnull=False, bookshelf__status=STATUS_ON).order_by('-bookshelf__sort')
+    queryset = Book.objects.filter(bookshelf__isnull=False, bookshelf__status=STATUS_ON).order_by('-bookshelf__order')
     serializer_class = BookSerializer
     pagination_class = None
 
