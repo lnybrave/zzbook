@@ -27,8 +27,13 @@ urlpatterns = [
         name='set_username'
     ),
     url(
-        r'^avatar/$',
-        views.SetAvatarView.as_view(),
+        r'^me/$',
+        views.UserView.as_view(),
+        name='user'
+    ),
+    url(
+        r'^me/avatar/$',
+        views.SetUserAvatarView.as_view(),
         name='set_avatar'
     ),
 ]

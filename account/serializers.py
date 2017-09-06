@@ -143,17 +143,12 @@ class SetUsernameSerializer(serializers.ModelSerializer):
         )
 
     def __init__(self, *args, **kwargs):
-        """
-        This method should probably be replaced by a better solution.
-        Its purpose is to replace USERNAME_FIELD with 'new_' + USERNAME_FIELD
-        so that the new field is being assigned a field for USERNAME_FIELD
-        """
         super(SetUsernameSerializer, self).__init__(*args, **kwargs)
         username_field = User.USERNAME_FIELD
         self.fields['new_' + username_field] = self.fields.pop(username_field)
 
 
-class SetAvatarSerializer(serializers.ModelSerializer):
+class SetUserAvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('pk', 'avatar')
@@ -162,4 +157,10 @@ class SetAvatarSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            User._meta.pk.name,
+            User.USERNAME_FIELD,
+            'nickname',
+            'avatar',
+        )
+        read_only_fields = (User.USERNAME_FIELD,)

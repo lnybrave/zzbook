@@ -6,7 +6,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
 from account.models import User
-from account.serializers import SetAvatarSerializer, LoginSerializer, UserSerializer, RegistrationSerializer, \
+from account.serializers import SetUserAvatarSerializer, LoginSerializer, UserSerializer, RegistrationSerializer, \
     PasswordResetSerializer, PasswordSerializer, SetUsernameSerializer, PasswordResetConfirmSerializer, \
     ActivationSerializer
 from utils import public_fun
@@ -142,11 +142,24 @@ class SetUsernameView(ActionViewMixin, generics.GenericAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class SetAvatarView(generics.GenericAPIView):
+class UserView(generics.RetrieveUpdateAPIView):
+    """
+    获取、更新用户信息
+    """
+    model = User
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    pagination_class = None
+
+    def get_object(self, *args, **kwargs):
+        return self.request.user
+
+
+class SetUserAvatarView(generics.GenericAPIView):
     """
     修改用户头像
     """
-    serializer_class = SetAvatarSerializer
+    serializer_class = SetUserAvatarSerializer
     permission_classes = (permissions.IsAuthenticated,)
     parser_classes = (MultiPartParser,)
 
@@ -162,15 +175,3 @@ class SetAvatarView(generics.GenericAPIView):
         user.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class UserView(generics.RetrieveUpdateAPIView):
-    """
-    Use this endpoint to retrieve/update user.
-    """
-    model = User
-    serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_object(self, *args, **kwargs):
-        return self.request.user
