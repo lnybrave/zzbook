@@ -192,6 +192,13 @@ SWAGGER_SETTINGS = {
     # 'LOGOUT_URL': 'logout',
 }
 
+# email
+EMAIL_HOST = "smtp.163.com"  # 服务器
+EMAIL_HOST_USER = "xliuee@163.com"  # 账号
+EMAIL_HOST_PASSWORD = "lny123123"  # 授权码
+EMAIL_USE_TLS = False  # 一般都为False
+EMAIL_FROM = "xliuee@163.com"  # 邮箱来自
+
 # auth user
 AUTH_USER_MODEL = 'account.User'
 
@@ -199,4 +206,3 @@ AUTH_USER_MODEL = 'account.User'
 MPTT_ADMIN_LEVEL_INDENT = 20
 
 SITE_ID = 1
-

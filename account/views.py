@@ -5,10 +5,10 @@ from rest_framework import status, generics, permissions, views
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 
-from account.models import User
+from account.models import User, EmailVerifyRecord
 from account.serializers import SetUserAvatarSerializer, LoginSerializer, UserSerializer, RegistrationSerializer, \
     PasswordResetSerializer, PasswordSerializer, SetUsernameSerializer, PasswordResetConfirmSerializer, \
-    ActivationSerializer
+    ActivationSerializer, EmailVerifySerializer
 from utils import public_fun
 
 
@@ -17,6 +17,28 @@ class ActionViewMixin(object):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return self._action(serializer)
+
+
+class EmailVerifyView(ActionViewMixin, generics.GenericAPIView):
+    """
+    邮箱验证码
+    """
+    serializer_class = EmailVerifySerializer
+    permission_classes = (
+        permissions.AllowAny,
+    )
+
+    def _action(self, serializer):
+        code = public_fun.randomCode(4)
+        record = EmailVerifyRecord()
+        record.code = code
+        record.email = serializer.data['email']
+        record.type = serializer.data['type']
+        record.save()
+        if public_fun.send_email_code(serializer.data['email'], code):
+            return Response(status=status.HTTP_200_OK)
+
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class RegistrationView(generics.CreateAPIView):

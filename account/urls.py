@@ -36,4 +36,9 @@ urlpatterns = [
         views.SetUserAvatarView.as_view(),
         name='set_avatar'
     ),
+    url(
+        r'^verify/$',
+        views.EmailVerifyView.as_view(),
+        name='set_avatar'
+    ),
 ]

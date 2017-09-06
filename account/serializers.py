@@ -4,7 +4,13 @@ from django.contrib.auth.password_validation import validate_password
 from django.db import IntegrityError, transaction
 from rest_framework import serializers
 
-from account.models import User
+from account.models import User, EmailVerifyRecord
+
+
+class EmailVerifySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailVerifyRecord
+        fields = ('email', 'type')
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
