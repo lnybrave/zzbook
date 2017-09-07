@@ -24,16 +24,15 @@ from books.views import BookViewSet
 from bookshelf.views import BookshelfViewSet
 from menu.views import MenuViewSet
 from search.views import SearchWordViewSet, SearchBookViewSet, SearchSuggestViewSet, SearchTopViewSet
-from subject.views import ClassificationViewSet, ClassificationBooksViewSet, ColumnViewSet, \
+from subject.views import ClassificationViewSet, ColumnViewSet, \
     RankingViewSet, RankingBooksViewSet, TopicViewSet, RankingWithBooksViewSet, TopicDetailViewSet, ColumnDetailViewSet, \
-    RecommendationView
+    RecommendationView, ClassificationBooksView
 
 router = DefaultRouter()
 router.register(r'api/banner', BannerViewSet)
 router.register(r'api/bookshelf', BookshelfViewSet)
 router.register(r'api/stack/book', BookViewSet)
 router.register(r'api/stack/menu', MenuViewSet)
-# router.register(r'api/stack/recommendation', RecommendationViewSet)
 router.register(r'api/stack/topic', TopicViewSet)
 router.register(r'api/stack/topic', TopicDetailViewSet)
 router.register(r'api/stack/column', ColumnViewSet)
@@ -50,9 +49,7 @@ urlpatterns = [
     url(r'^api/stack/column/(?P<id>\d+)/detail/$', ColumnDetailViewSet.as_view(
         {'get': 'list'}
     )),
-    url(r'^api/stack/classification/(?P<parent>\d+)/(?P<id>\d+)/books/$', ClassificationBooksViewSet.as_view(
-        {'get': 'list'}
-    )),
+    url(r'^api/stack/classification/(?P<id>\d+)/books/$', ClassificationBooksView.as_view()),
     url(r'^api/stack/ranking/(?P<id>\d+)/books/$', RankingBooksViewSet.as_view(
         {'get': 'list'}
     )),

@@ -1,7 +1,8 @@
 # !/bin/user/python
 # -*- coding=utf-8 -*-
-
+import django_filters
 from rest_framework import mixins, generics
+from rest_framework.filters import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -92,21 +93,32 @@ class ClassificationViewSet(mixins.ListModelMixin, GenericViewSet):
         return super(ClassificationViewSet, self).get_queryset()
 
 
-class ClassificationBooksViewSet(mixins.ListModelMixin, GenericViewSet):
+class ClassificationConfigFilter(django_filters.FilterSet):
+    item_id = django_filters.Filter(name="classificationconfig", lookup_type='item')
+
+    class Meta:
+        fields = ['item_id']
+
+
+class ClassificationBooksFilter(ClassificationConfigFilter):
+    class Meta:
+        model = Book
+        fields = ['item_id']
+
+
+class ClassificationBooksView(generics.ListAPIView):
     """
     分类图书列表
     """
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = ClassificationBooksFilter
 
     def get_queryset(self):
-        first_id = self.kwargs.get('parent', None)
-        second_id = self.kwargs.get('id', None)
-        param = {}
-        if first_id is not None:
-            param['classificationconfig__item__parent'] = first_id
-        if second_id is not None:
-            param['classificationconfig__item'] = second_id
-        return Book.objects.filter(**param).distinct()
+        parent = self.kwargs.get('id', None)
+        return super(ClassificationBooksView, self).get_queryset().filter(
+            classificationconfig__item__parent=parent).distinct()
 
 
 class RankingViewSet(mixins.ListModelMixin, GenericViewSet):
