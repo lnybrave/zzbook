@@ -3,7 +3,7 @@
 
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from suit.admin import SortableTabularInline
+from suit.admin import SortableTabularInline, SortableModelAdmin
 
 from subject.models import Topic, Ranking, Classification, ColumnConfig, Column, ClassificationConfig, RankingConfig, \
     TopicConfig
@@ -36,11 +36,11 @@ class ColumnInline(SortableTabularInline):
 
 
 @admin.register(Column)
-class ColumnAdmin(MPTTModelAdmin):
+class ColumnAdmin(SortableModelAdmin):
     """
     栏目
     """
-    list_display = ['name', 'order']
+    list_display = ['name', 'desc', 'order', 'is_active']
 
     exclude = ['del_flag']
 

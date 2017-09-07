@@ -13,7 +13,7 @@ class MenuAdmin(SortableModelAdmin):
     """
     菜单
     """
-    list_display = ['name', 'desc', 'icon_img', 'order', 'is_recommend', 'status']
+    list_display = ['name', 'desc', 'icon_img', 'order', 'status']
 
     exclude = ['del_flag', 'icon_img']
 
@@ -21,7 +21,7 @@ class MenuAdmin(SortableModelAdmin):
         if db_field.name == 'topic':
             kwargs["queryset"] = Topic.objects.all()
         elif db_field.name == 'column':
-            kwargs["queryset"] = Column.objects.filter(level=0)
+            kwargs["queryset"] = Column.objects.all()
         elif db_field.name == 'ranking':
             kwargs["queryset"] = Ranking.objects.filter(level=0)
         elif db_field.name == 'classification':

@@ -1,7 +1,7 @@
 # !/bin/user/python
 # -*- coding=utf-8 -*-
 
-from rest_framework import mixins
+from rest_framework import mixins, generics
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
@@ -35,7 +35,7 @@ class ColumnViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     栏目
     """
-    queryset = Column.objects.filter(level=0).all()
+    queryset = Column.objects.all()
     serializer_class = ColumnSerializer
     pagination_class = None
 
@@ -43,6 +43,20 @@ class ColumnViewSet(mixins.ListModelMixin, GenericViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = ColumnSerializer(queryset, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
+
+
+class RecommendationView(generics.ListAPIView):
+    """
+    精选栏目
+    """
+    queryset = ColumnConfig.objects.all()
+    serializer_class = ColumnConfigSerializer
+
+    def get_queryset(self):
+        item = Column.objects.all()[0]
+        if item is not None:
+            return ColumnConfig.objects.filter(item=item).all()
+        return super(RecommendationView, self).get_queryset()
 
 
 class ColumnDetailViewSet(mixins.ListModelMixin, GenericViewSet):

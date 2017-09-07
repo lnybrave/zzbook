@@ -64,14 +64,13 @@ class TopicConfig(models.Model):
         return "unknown"
 
 
-class Column(MPTTModel):
+class Column(models.Model):
     name = models.CharField(max_length=128, verbose_name=u'名称')
     desc = models.CharField(max_length=256, verbose_name=u'描述')
     order = models.IntegerField(default=0, verbose_name=u'排序')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'修改时间')
-    del_flag = models.IntegerField(default=0, verbose_name=u'删除')
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    is_active = models.BooleanField(verbose_name=u'是否激活', default=False)
 
     class Meta:
         db_table = "t_column"

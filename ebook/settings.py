@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'bookshelf',
     'menu',
     'subject',
-    'recommend',
     'search',
     'data',
 ]
