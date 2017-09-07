@@ -200,6 +200,9 @@ class Ranking(MPTTModel):
     def __unicode__(self):
         return self.name
 
+    def get_top_three_books(self):
+        return Book.objects.filter(rankingconfig__item=self).order_by('rankingconfig__order')[:3]
+
 
 class RankingConfig(models.Model):
     item = models.ForeignKey(Ranking, verbose_name=u'排行')

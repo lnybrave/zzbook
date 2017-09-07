@@ -85,15 +85,11 @@ class RankingItemSerializer(serializers.ModelSerializer):
 
 # noinspection PyMethodMayBeStatic
 class RankingItemWithBooksSerializer(serializers.ModelSerializer):
-    books = serializers.SerializerMethodField('get_top_books')
+    books = serializers.SerializerMethodField()
 
     class Meta:
         model = Ranking
         fields = ('id', 'name', 'books')
 
-    def get_top_books(self, obj):
-        """
-        获取前几本图示
-        """
-        indicators = Book.objects.filter(rankingconfig__item=obj).order_by('rankingconfig__order')[:3]
-        return BookSerializer(indicators, many=True).data
+    def get_books(self, obj):
+        return BookSerializer(obj.get_top_three_books(), many=True).data
