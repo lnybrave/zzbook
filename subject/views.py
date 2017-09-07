@@ -127,8 +127,9 @@ class RankingViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     queryset = Ranking.objects.all()
     serializer_class = RankingItemSerializer
-    pagination_class = None
+    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['parent']
+    pagination_class = None
 
     def get_queryset(self):
         parent = self.request.query_params.get('parent', None)
@@ -146,8 +147,9 @@ class RankingWithBooksViewSet(mixins.ListModelMixin, GenericViewSet):
     """
     queryset = Ranking.objects.all()
     serializer_class = RankingItemWithBooksSerializer
-    pagination_class = None
+    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['parent']
+    pagination_class = None
 
     def get_queryset(self):
         parent = self.request.query_params.get('parent', None)
