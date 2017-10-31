@@ -39,7 +39,6 @@ class SearchSuggestViewSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = SearchWordSerializer
     pagination_class = None
 
-    # 对list有效
     filter_backends = [filters.DjangoFilterBackend]
     filter_fields = ['word']
 
